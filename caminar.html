@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personalized Run Tracker</title>
+    <style>
+    
+    body {
+           font-family: 'Segoe UI', sans-serif;
+        /* --- ADD THESE LINES --- */
+        background-image: url('Homie.jpg');
+        background-size: cover;          /* Makes image cover the whole screen */
+        background-position: center;     /* Centers the image */
+        background-attachment: fixed;    /* Keeps image still while scrolling */
+        background-repeat: no-repeat;
+        /* ----------------------- */
+
+        color: black;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        text-align: center;
+        
+        font-family: 'Segoe UI', Georgia serif; text-align: center; padding: 20px; --accent: #ff3300; }
+        .card { background: rgba(255, 255, 255, 0.1); max-width: 400px; margin: 0 auto; padding: 20px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border-bottom: 4px solid var(--accent); }
+        .input-group { background: rgba(255, 255, 255, 0.1); margin-bottom: 20px; text-align: left; }
+        input { background: rgba(255, 255, 255, 0.1); width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #ddd; border-radius: 5px; box-sizing: border-box; }
+        .stats { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
+        .stat-item { background: rgba(255, 255, 255, 0.1); padding: 15px; border-radius: 10px; }
+        .stat-value { font-size: 1.5em; font-weight: bold; display: block; color: #000000; }
+        button { width: 100%; padding: 15px; font-size: 1.1em; font-weight: bold; cursor: pointer; border-radius: 8px; border: none; transition: 0.3s; }
+        .start { background:#ff3300; color: black; }
+        .stop { background:#ff3300; color: black; }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <h2>Camina Fitness</h2>
+
+    <!-- User Input for Weight -->
+    <div class="input-group">
+        <label for="weight">Tu Peso (kg):</label>
+        <input type="number" id="weight" value="70" placeholder="Enter weight in kg">
+    </div>
+
+    <div class="stats">
+        <div class="stat-item">
+            <span class="stat-value" id="distText">0.00</span>
+            <small>KM</small>
+        </div>
+        <div class="stat-item">
+            <span class="stat-value" id="calText">0</span>
+            <small>KCAL</small>
+        </div>
+        <div class="stat-item" style="grid-column: span 2;">
+            <span class="stat-value" id="timeText">00:00:00</span>
+            <small>DURACION</small>
+        </div>
+    </div>
+
+    <button id="mainBtn" class="start">EMPEZAR</button>
+</div>
+
+ <button onclick="window.location.href='index.html';" class="start" style="width: 100px; height: 50px;">
+ INICIO
+</button>
+
+<script>
+
+
+  
+
+         
+    let isTracking = false;
+    let watchId = null;
+    let distance = 0;
+    let lastPos = null;
+    let startTime = null; // Tracks exactly when the run started
+    let timerId = null;
+
+    const btn = document.getElementById('mainBtn');
+    const weightInput = document.getElementById('weight');
+
+    function getDistance(lat1, lon1, lat2, lon2) {
+        const R = 6371;
+        const dLat = (lat2 - lat1) * Math.PI / 180;
+        const dLon = (lon2 - lon1) * Math.PI / 180;
+        const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+                  Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+                  Math.sin(dLon/2) * Math.sin(dLon/2);
+        return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+    }
+
+    function updateStats() {
+        if (!isTracking) return;
+
+        const userWeight = parseFloat(weightInput.value) || 70;
+        const now = Date.now();
+        
+        // 1. ACTIVE CALORIES (Distance-based)
+        const activeCals = distance * userWeight * 0.5;
+
+        // 2. REST CALORIES (Time-based Fix for APK)
+        // Instead of a timer, we see how many minutes have passed since 'startTime'
+        // This works even if the phone was locked/sleeping!
+        const elapsedMinutes = (now - startTime) / 60000;
+        const restCals = elapsedMinutes * 1; // 1 kcal per minute
+
+        const totalCals = activeCals + restCals;
+
+        document.getElementById('distText').innerText = distance.toFixed(2);
+        document.getElementById('calText').innerText = Math.round(totalCals);
+    }
+
+    btn.addEventListener('click', () => {
+        if (!isTracking) {
+            isTracking = true;
+            btn.innerText = "PARAR";
+            btn.className = "stop";
+            weightInput.disabled = true;
+            
+            // Capture the exact moment we start
+            startTime = Date.now();
+            distance = 0;
+
+            // GPS TRACKING
+            watchId = navigator.geolocation.watchPosition(p => {
+                const { latitude, longitude } = p.coords;
+                if (lastPos) {
+                   const d = getDistance(lastPos.lat, lastPos.lon, latitude, longitude);
+                   if (d > 0.003) { // 3 meters threshold
+                       distance += d;
+                       updateStats();
+                   }
+                }
+                lastPos = { lat: latitude, lon: longitude };
+            }, e => alert("Activa el GPS"), { enableHighAccuracy: true });
+
+            // UI REFRESH TIMER (Updates every second)
+            timerId = setInterval(() => {
+                const now = Date.now();
+                const diff = now - startTime;
+                
+                const h = Math.floor(diff / 3600000).toString().padStart(2, '0');
+                const m = Math.floor((diff % 3600000) / 60000).toString().padStart(2, '0');
+                const s = Math.floor((diff % 60000) / 1000).toString().padStart(2, '0');
+                
+                document.getElementById('timeText').innerText = `${h}:${m}:${s}`;
+                
+                // Update calories every second based on current time
+                updateStats();
+            }, 1000);
+
+        } else {
+            isTracking = false;
+            btn.innerText = "EMPEZAR";
+            btn.className = "start";
+            weightInput.disabled = false;
+            navigator.geolocation.clearWatch(watchId);
+            clearInterval(timerId);
+            lastPos = null;
+        }
+    });
+
+
+</script>
+<script>
+const playBtn = document.getElementById('mainBtn');
+
+// 2. Create the audio object (replace 'yourfile.mp3' with your actual filename)
+const song = new Audio('gracias.mp3');
+
+// 3. Add the click event
+playBtn.addEventListener('click', () => {
+    if (song.paused) {
+        song.play();
+        playBtn.textContent = 'Pause';
+    } else {
+        song.pause();
+        playBtn.textContent = 'Play';
+    }
+});
+</script>
+
+
+
+</body>
+</html>

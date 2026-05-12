@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/5/w3.css">
+     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <title>Modern Responsive Layout</title>
     <style>
     
@@ -176,8 +177,45 @@
         <button onclick="window.location.href='index.html';" style="background-color:#333; color:white;">INICIO</button>
     </div>
 <h1>Tabla De Frecuencia Cardiaca</h1>
+            
+            
             <img src="pulso.png" class="w3-round w3-image w3-opacity-min" alt="Table Setting" width="600" height="750">
-<script>
+<div style="width: 600px;">
+    <canvas id="myChart"></canvas>
+</div>
+
+            <script>
+  const ctx = document.getElementById('myChart');
+
+  const myChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: ['Lunes', 'Martes', 'Miercoles'],
+      datasets: [{
+        label: 'Heart Rate',
+        data: [54, 60, 55],
+        borderWidth: 2,
+        borderColor: 'rgb(75, 192, 192)',
+        tension: 0.1
+      }]
+    },
+   options: {
+      scales: {
+        y: {
+          beginAtZero: true,
+          max: 120, // This sets the top of the axis to 120
+          ticks: {
+            stepSize: 10 // This ensures a label appears every 10 units (0, 10, 20..
+          }
+        }
+      }
+    }
+  });
+</script>
+
+            
+            
+            <script>
     let startTime;
     let elapsedTime = 0;
     let timerInterval;

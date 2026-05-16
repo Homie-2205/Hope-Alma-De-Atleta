@@ -1,31 +1,87 @@
-<!DOCTYPE html>
-<html lang="en">
+
+  <!DOCTYPE html>
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Search Google Sheet Rows</title>
+    
     <style>
-        body { font-family: Arial, sans-serif; margin: 30px; }
-        .search-box { margin-bottom: 20px; }
-        input { padding: 8px; width: 250px; }
-        button { padding: 8px 15px; cursor: pointer; }
-        #data-container { margin-top: 20px; padding: 15px; border: 1px solid #ccc; max-width: 400px; }
+        body { 
+            text-align: center; 
+            padding: 20px;  
+            --accent: #006600;
+            background-color: #d9ffcc;
+            font-family: Georgia, serif; 
+            margin: 30px; 
+        }
+        .search-box { 
+        background: transparent; 
+            margin-bottom: 20px; 
+        }
+        input { 
+        background: transparent; 
+            padding: 8px; 
+            width: 250px; 
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button { 
+        background: transparent; 
+            padding: 8px 15px; 
+            cursor: pointer; 
+        }
+        #data-container { 
+        background: transparent; 
+            margin: 20px auto; 
+            padding: 15px; 
+            border: 1px solid #ccc; 
+            max-width: 400px; 
+            background: #d9ffcc;
+            border-radius: 8px;
+        }
+        .card { 
+            background: transparent; 
+            max-width: 400px; 
+            margin: 0 auto 20px auto; 
+            padding: 20px; 
+            border-radius: 15px; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1); 
+            border-bottom: 4px solid var(--accent); 
+        }
+        h1 {
+            font-family: Georgia, serif;
+            letter-spacing: 5px;
+            font-size: 30px; 
+            font-weight: 300; 
+        }
+        p {
+            font-family: Georgia, serif;
+            font-size: 11px;
+        }
+       
     </style>
 </head>
 <body>
 
-    <h1>Database Search</h1>
+    <!-- Changed id="card" to class="card" to match your CSS -->
+    <div class="card"> 
+        <h1>Base de Datos de Alimentos </h1>
+        
+        <div class="search-box">
+            <input type="text" id="searchInput" placeholder="Escribe bien el alimento">
+            <button onclick="executeSearch()">Buscar</button>
+        </div>
+
+        <div id="data-container">Tu resultado aparecerá aquí</div>
+    </div>
     
-    <div class="search-box">
-        <!-- Single input element for both rows and names -->
-        <input type="text" id="searchInput" placeholder="Enter row number OR name...">
-        <button onclick="executeSearch()">Search</button>
+    <div>
+        <button onclick="window.location.href='Nutrición.html';" class="start-btn">
+            INICIO
+        </button>
     </div>
 
-    <div id="data-container">Results will appear here...</div>
-    <button onclick="window.location.href='Nutrición.html';" class="start" style="width: 100px; height: 50px; background-color: green; color: white;">
-  INICIO
-</button>
 
 
 

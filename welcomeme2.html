@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personalized Run Tracker</title>
+    <!-- Cargamos Font Awesome para los iconos vectoriales -->
+    <link rel="stylesheet" href="https://cloudflare.com">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-image: url('Homie.jpeg');
+            background-size: cover;          
+            background-position: center;     
+            background-attachment: fixed;    
+            background-repeat: no-repeat;
+            color: black;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            text-align: center;
+            padding: 20px;  
+            box-sizing: border-box;
+            --accent: #ff0000;
+        }
+
+        h2 {
+            font-family: Georgia, sans-serif;
+            color: yellow;
+            font-size: 27px;
+            text-shadow: -1px -1px 0 #000;
+            -webkit-text-stroke: 1px black; 
+            margin: 10px 0 20px 0;
+        }
+
+        /* Contenedor para alinear la lista a la izquierda */
+        .menu-list {
+            text-align: left;
+            padding-left: 15px;
+        }
+
+        /* Bloque individual de cada enlace */
+        .menu-item {
+            margin: 15px 0;
+            display: flex;
+            align-items: center;
+        }
+
+        /* Estilo para los iconos */
+        .menu-item i {
+            color: yellow;
+            font-size: 22px;
+            width: 35px; /* Ancho fijo para mantener los textos alineados */
+            text-shadow: -1px -1px 0 #000;
+            -webkit-text-stroke: 1px black;
+            transition: all 0.3s ease;
+        }
+
+        a {
+            font-family: Georgia, serif;
+            font-size: 22px;
+            color: yellow;
+            text-decoration: none;
+            transition: all 0.3s ease; 
+            -webkit-text-stroke: 1px black; 
+            display: inline-block;
+        }
+
+        /* Efecto Hover unificado para Icono + Texto */
+        .menu-item:hover a {
+            font-family: "Courier New", Georgia, serif; 
+            font-size: 24px;                     
+            color: red;                          
+        }
+
+        .menu-item:hover i {
+            color: red;
+            font-size: 24px;
+        }
+
+        .card { 
+            background: rgba(255, 255, 255, 0.15); 
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            width: 100%;
+            max-width: 400px; 
+            margin: 10px auto; 
+            padding: 20px; 
+            border-radius: 15px; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2); 
+            border-bottom: 4px solid var(--accent); 
+            box-sizing: border-box;
+        }
+
+        .input-group { 
+            margin-bottom: 20px; 
+            text-align: left; 
+        }
+        
+        .input-group label {
+            color: white;
+            font-weight: bold;
+            text-shadow: 1px 1px 2px black;
+        }
+
+        input { 
+            background: rgba(255, 255, 255, 0.7); 
+            width: 100%; 
+            padding: 10px; 
+            margin-top: 5px; 
+            border: 1px solid #ddd; 
+            border-radius: 5px; 
+            box-sizing: border-box; 
+            font-size: 1em;
+        }
+
+        .stats { 
+            display: grid; 
+            grid-template-columns: 1fr 1fr; 
+            gap: 10px; 
+            margin-bottom: 20px; 
+        }
+
+        .stat-item { 
+            background: rgba(0, 0, 0, 0.6); 
+            padding: 15px; 
+            border-radius: 10px; 
+            color: white;
+        }
+
+        .stat-value { 
+            font-size: 1.8em; 
+            font-weight: bold; 
+            display: block; 
+            color: #ffff66; 
+        }
+
+        .full-width {
+            grid-column: span 2;
+        }
+
+        button { 
+            width: 100%; 
+            padding: 15px; 
+            font-size: 1.1em; 
+            font-weight: bold; 
+            cursor: pointer; 
+            border-radius: 8px; 
+            border: none; 
+            transition: 0.3s; 
+        }
+
+        .start { background: #00cc44; color: white; }
+        .stop { background: #cc0000; color: white; }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <h2>Alma de Atleta</h2>
+    
+    <!-- Contenedor del menú alineado a la izquierda -->
+    <div class="menu-list">
+        <div class="menu-item" style="display: flex; align-items: center; margin-bottom: 8px;">
+            <!-- Atributos width y height añadidos directamente para controlar las dimensiones -->
+            <img src="correr.png" alt="Icono Correr" width="20" height="20" style="margin-right: 12px; object-fit: contain;">
+            <a href="correr.html" class="w3-bar-item w3-button">Correr</a>
+        </div>
+        <div class="menu-item" style="display: flex; align-items: center; margin-bottom: 8px;">
+            <img src="bikes.png" alt="Icono Bicicleta" width="20" height="20" style="margin-right: 12px; object-fit: contain;">
+            <a href="bici.html" class="w3-bar-item w3-button">Bicicleta</a>
+        </div>
+        <div class="menu-item" style="display: flex; align-items: center; margin-bottom: 8px;">
+            <img src="caminarr.png" alt="Icono Caminar" width="20" height="20" style="margin-right: 12px; object-fit: contain;">
+            <a href="caminar.html" class="w3-bar-item w3-button">Caminar</a>
+        </div>
+        <div class="menu-item" style="display: flex; align-items: center; margin-bottom: 8px;">
+            <img src="beat.png" alt="Icono Frecuencia Cardíaca" width="20" height="20" style="margin-right: 12px; object-fit: contain;">
+            <a href="pulsorecuperacion.html" class="w3-bar-item w3-button">Frecuencia Cardíaca</a>
+        </div>
+        <div class="menu-item" style="display: flex; align-items: center; margin-bottom: 8px;">
+            <img src="nutrition.png" alt="Icono Nutrición" width="20" height="20" style="margin-right: 12px; object-fit: contain;">
+            <a href="Nutrición.html" class="w3-bar-item w3-button">Nutrición</a>
+        </div>
+        <div class="menu-item" style="display: flex; align-items: center; margin-bottom: 8px;">
+            <img src="data.png" alt="Icono Base de datos" width="20" height="20" style="margin-right: 12px; object-fit: contain;">
+            <a href="ICBF.html" class="w3-bar-item w3-button">Base de datos</a>
+        </div>
+    </div>
+</div>
+
+           
+<!-- PANEL DE SEGUIMIENTO DE ACTIVIDAD -->
+<div class="card">
+    <div class="input-group">
+        <label for="weight">Peso Corporal (kg):</label>
+        <input type="number" id="weight" value="70" min="30" max="200">
+    </div>
+
+    <div class="stats">
+        <div class="stat-item full-width">
+            <span class="stat-value" id="timeText">00:00:00</span>
+            Tiempo Transcurrido
+        </div>
+        <div class="stat-item">
+            <span class="stat-value" id="distText">0.00</span>
+            Distancia (km)
+        </div>
+        <div class="stat-item">
+            <span class="stat-value" id="calText">0</span>
+            Calorías (kcal)
+        </div>
+    </div>
+
+    <button id="mainBtn" class="start">EMPEZAR</button>
+</div>
+
+<script>
+    let isTracking = false;
+    let watchId = null;
+    let distance = 0;
+    let lastPos = null; 
+    let startTime = null; 
+    let timerId = null;
+
+    const btn = document.getElementById('mainBtn');
+    const weightInput = document.getElementById('weight');
+
+    function getDistance(lat1, lon1, lat2, lon2) {
+        const R = 6371;
+        const dLat = (lat2 - lat1) * Math.PI / 180;
+        const dLon = (lon2 - lon1) * Math.PI / 180;
+        const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+                  Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+                  Math.sin(dLon/2) * Math.sin(dLon/2);
+        return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+    }
+
+    function updateStats() {
+        if (!isTracking) return;
+
+        const userWeight = parseFloat(weightInput.value) || 70;
+        const now = Date.now();
+
+        const activeCals = distance * userWeight * 1.036;
+        const elapsedMinutes = (now - startTime) / 60000;
+        const restCals = elapsedMinutes * 1; 
+
+        const totalCals = activeCals + restCals;
+
+        document.getElementById('distText').innerText = distance.toFixed(2);
+        document.getElementById('calText').innerText = Math.round(totalCals);
+    }
+
+    btn.addEventListener('click', () => {
+        if (!isTracking) {
+            if (!navigator.geolocation) {
+                alert("Tu navegador o dispositivo no soporta Geolocalización");
+                return;
+            }
+
+            isTracking = true;
+            btn.innerText = "PARAR";
+            btn.className = "stop";
+            weightInput.disabled = true;
+
+            startTime = Date.now();
+            distance = 0;
+            lastPos = null; 
+            
+            document.getElementById('distText').innerText = "0.00";
+            document.getElementById('calText').innerText = "0";
+
+            watchId = navigator.geolocation.watchPosition(p => {
+                const { latitude, longitude } = p.coords;
+                if (lastPos) {
+                   const d = getDistance(lastPos.lat, lastPos.lon, latitude, longitude);
+                   if (d > 0.003) { 
+                       distance += d;
+                       updateStats();
+                   }
+                }
+                lastPos = { lat: latitude, lon: longitude };
+            }, e => {
+                alert("Error de GPS: Por favor activa la ubicación de tu dispositivo.");
+            }, { enableHighAccuracy: true, timeout: 10000 });
+
+            timerId = setInterval(() => {
+                const now = Date.now();
+                const diff = now - startTime;
+
+                const h = Math.floor(diff / 3600000).toString().padStart(2, '0');
+                const m = Math.floor((diff % 3600000) / 60000).toString().padStart(2, '0');
+                const s = Math.floor((diff % 60000) / 1000).toString().padStart(2, '0');
+
+                document.getElementById('timeText').innerText = `${h}:${m}:${s}`;
+                updateStats();
+            }, 1000);
+
+        } else {
+            isTracking = false;
+            btn.innerText = "EMPEZAR";
+            btn.className = "start";
+            weightInput.disabled = false;
+            if (watchId) navigator.geolocation.clearWatch(watchId);
+            if (timerId) clearInterval(timerId);
+            lastPos = null;
+        }
+    });
+</script>
+
+</body>
+</html>
+

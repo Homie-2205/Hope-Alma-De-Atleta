@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Music Search</title>
+    <style>
+        body { font-family: sans-serif; padding: 15px; }
+        input { width: 100%; padding: 10px; margin-bottom: 15px; box-sizing: border-box; }
+        .song { padding: 10px; border-bottom: 1px solid #ccc; }
+        .artist { color: #666; font-size: 0.9em; }
+    </style>
+</head>
+<body>
+
+    <input type="text" id="searchBar" placeholder="Search song or artist..." oninput="filterMusic()">
+    <div id="library">Loading music...</div>
+
+    <script>
+        let allSongs = [];
+
+        // Call native Android bridge on load
+        window.onload = function() {
+            if (window.AndroidMusicApp) {
+                const jsonString = window.AndroidMusicApp.getLocalMusic();
+                allSongs = JSON.parse(jsonString);
+                displayMusic(allSongs);
+            } else {
+                document.getElementById('library').innerText = "Native interface not detected.";
+            }
+        };
+
+        function displayMusic(songs) {
+            const container = document.getElementById('library');
+            container.innerHTML = '';
+            
+            if (songs.length === 0) {
+                container.innerHTML = 'No songs found.';
+                return;
+            }
+
+            songs.forEach(song => {
+                const div = document.createElement('div');
+                div.className = 'song';
+                div.innerHTML = `<strong>${song.title}</strong><br><span class="artist">${song.artist}</span>`;
+                container.appendChild(div);
+            });
+        }
+
+        function filterMusic() {
+            const query = document.getElementById('searchBar').value.toLowerCase();
+            const filtered = allSongs.filter(song => 
+                song.title.toLowerCase().includes(query) || 
+                song.artist.toLowerCase().includes(query)
+            );
+            displayMusic(filtered);
+        }
+    </script>
+</body>
+</html>

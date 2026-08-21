@@ -5,37 +5,136 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Personalized Run Tracker</title>
     <style>
-    
-    body {
-           font-family: 'Segoe UI', sans-serif;
-        /* --- ADD THESE LINES --- */
-        background-image: url('Canada.jpeg');
-        background-size: cover;          /* Makes image cover the whole screen */
-        background-position: center;     /* Centers the image */
-        background-attachment: fixed;    /* Keeps image still while scrolling */
-        background-repeat: no-repeat;
-        /* ----------------------- */
 
-        color: black;
-        margin: 0;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        height: 100vh;
-        text-align: center;
+
+        /* --- General Layout --- */
+        body {
+            font-family: 'Segoe UI', Georgia, serif;
+            background-image: url('Canada.jpeg');
+            background-size: cover;          
+            background-position: center;     
+            background-attachment: fixed;    
+            background-repeat: no-repeat;
+            color: black;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            min-height: 100vh;
+            text-align: center;
+            padding: 20px;
+            box-sizing: border-box;
+            --accent: #ff3300;
+        }
+
+        /* --- Shared Components --- */
+        input { 
+            background: rgba(255, 255, 255, 0.1); 
+            width: 100%; 
+            padding: 10px; 
+            margin-top: 5px; 
+            border: 1px solid #ddd; 
+            border-radius: 5px; 
+            box-sizing: border-box; 
+        }
+
+        button { 
+            width: 100%; 
+            padding: 15px; 
+            font-size: 1.1em; 
+            font-weight: bold; 
+            cursor: pointer; 
+            border-radius: 8px; 
+            border: none; 
+            transition: 0.3s; 
+        }
+
+        .start, .stop { 
+            background: #ff3300; 
+            color: black; 
+        }
+
+        /* --- Music Player Styles --- */
+        .app {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(5px);
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            width: 100%;
+            max-width: 400px;
+            box-sizing: border-box;
+        }
+
+        .times { display: flex; justify-content: space-between; color: #a1a1aa; font-size: 12px; }
+        .controls { display: flex; justify-content: center; align-items: center; gap: 22px; margin: 25px 0; }
         
-        font-family: 'Segoe UI', Georgia serif; text-align: center; padding: 20px; --accent: #ff3300; }
-        .card { background: rgba(255, 255, 255, 0.1); max-width: 400px; margin: 0 auto; padding: 20px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border-bottom: 4px solid var(--accent); }
-        .input-group { background: rgba(255, 255, 255, 0.1); margin-bottom: 20px; text-align: left; }
-        input { background: rgba(255, 255, 255, 0.1); width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #ddd; border-radius: 5px; box-sizing: border-box; }
+        .btn { 
+            border: 0; 
+            background: #27272a; 
+            color: #fff; 
+            border-radius: 50%;
+            width: 52px; 
+            height: 52px; 
+            font-size: 21px; 
+        }
+
+        .play { width: 68px; height: 68px; background: #fff; color: #09090b; font-size: 28px; }
+        
+        .action { 
+            width: 100%; 
+            padding: 14px; 
+            border: 0; 
+            border-radius: 12px; 
+            background: #27272a; 
+            color: #fff; 
+            font-size: 16px; 
+            margin-bottom: 12px; 
+        }
+
+        .playlist { margin-top: 20px; text-align: left; }
+        .song { padding: 14px; border-bottom: 1px solid #27272a; cursor: pointer; }
+        .song small { color: #a1a1aa; }
+        #file { display: none; } /* Kept hidden for customized button click */
+
+        /* --- Run Tracker Card Styles --- */
+        .card { 
+            background: rgba(255, 255, 255, 0.85); 
+            width: 100%;
+            max-width: 400px; 
+            margin: 20px auto; 
+            padding: 20px; 
+            border-radius: 15px; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1); 
+            border-bottom: 4px solid var(--accent); 
+            box-sizing: border-box;
+        }
+
+        .input-group { margin-bottom: 20px; text-align: left; }
         .stats { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
-        .stat-item { background: rgba(255, 255, 255, 0.1); padding: 15px; border-radius: 10px; }
+        .stat-item { background: rgba(0, 0, 0, 0.05); padding: 15px; border-radius: 10px; }
         .stat-value { font-size: 1.5em; font-weight: bold; display: block; color: #000000; }
-        button { width: 100%; padding: 15px; font-size: 1.1em; font-weight: bold; cursor: pointer; border-radius: 8px; border: none; transition: 0.3s; }
-        .start { background:#ff3300; color: black; }
-        .stop { background:#ff3300; color: black; }
+
+        /* --- Map Styles --- */
+        #map {
+            height: 300px;
+            width: 100%;
+            max-width: 400px;
+            background: #000; 
+            border: 2px solid #ff3333; 
+            border-radius: 8px;
+            margin: 20px 0;
+            box-shadow: 
+                0 0 5px #fff,            
+                0 0 10px #fff,           
+                0 0 20px #ff3333,           
+                0 0 40px #ff3333,           
+                0 0 80px #ff3333;           
+        }
     </style>
+        
+   
 </head>
 <body>
       <div class="app">

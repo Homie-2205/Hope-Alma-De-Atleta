@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,104 +6,289 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Personalized Run Tracker</title>
     <style>
-    
-    body {
-           font-family: 'Segoe UI', sans-serif;
-        /* --- ADD THESE LINES --- */
-        background-image: url('Canada.jpeg');
-        background-size: cover;          /* Makes image cover the whole screen */
-        background-position: center;     /* Centers the image */
-        background-attachment: fixed;    /* Keeps image still while scrolling */
-        background-repeat: no-repeat;
-        /* ----------------------- */
+        /* --- General Layout --- */
+        body {
+            font-family: 'Segoe UI', Georgia, serif;
+            background-image: url('Canada.jpeg');
+            background-size: cover;          
+            background-position: center;     
+            background-attachment: fixed;    
+            background-repeat: no-repeat;
+            color: black;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            min-height: 100vh;
+            text-align: center;
+            padding: 20px;
+            box-sizing: border-box;
+            --accent: #ff3300;
+        }
 
-        color: black;
-        margin: 0;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        height: 100vh;
-        text-align: center;
+        /* --- Shared Components --- */
+        input { 
+            background: rgba(255, 255, 255, 0.1); 
+            width: 100%; 
+            padding: 10px; 
+            margin-top: 5px; 
+            border: 1px solid #ddd; 
+            border-radius: 5px; 
+            box-sizing: border-box; 
+        }
+
+        button { 
+            width: 100%; 
+            padding: 15px; 
+            font-size: 1.1em; 
+            font-weight: bold; 
+            cursor: pointer; 
+            border-radius: 8px; 
+            border: none; 
+            transition: 0.3s; 
+        }
+
+        .start, .stop { 
+            background: #ff3300; 
+            color: black; 
+        }
+
+        /* --- Music Player Styles --- */
+        .app {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(5px);
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            width: 100%;
+            max-width: 400px;
+            box-sizing: border-box;
+        }
+
+        .times { display: flex; justify-content: space-between; color: #a1a1aa; font-size: 12px; }
+        .controls { display: flex; justify-content: center; align-items: center; gap: 22px; margin: 25px 0; }
         
-        font-family: 'Segoe UI', Georgia serif; text-align: center; padding: 20px; --accent: #ff3300; }
-        .card { background: rgba(255, 255, 255, 0.1); max-width: 400px; margin: 0 auto; padding: 20px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border-bottom: 4px solid var(--accent); }
-        .input-group { background: rgba(255, 255, 255, 0.1); margin-bottom: 20px; text-align: left; }
-        input { background: rgba(255, 255, 255, 0.1); width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #ddd; border-radius: 5px; box-sizing: border-box; }
+        .btn { 
+            border: 0; 
+            background: #27272a; 
+            color: #fff; 
+            border-radius: 50%;
+            width: 52px; 
+            height: 52px; 
+            font-size: 21px; 
+        }
+
+        .play { width: 68px; height: 68px; background: #fff; color: #09090b; font-size: 28px; }
+        
+        .action { 
+            width: 100%; 
+            padding: 14px; 
+            border: 0; 
+            border-radius: 12px; 
+            background: #27272a; 
+            color: #fff; 
+            font-size: 16px; 
+            margin-bottom: 12px; 
+        }
+
+        .playlist { margin-top: 20px; text-align: left; }
+        .song { padding: 14px; border-bottom: 1px solid #27272a; cursor: pointer; }
+        .song small { color: #a1a1aa; }
+        #file { display: none; } /* Kept hidden for customized button click */
+
+        /* --- Run Tracker Card Styles --- */
+        .card { 
+            background: rgba(255, 255, 255, 0.85); 
+            width: 100%;
+            max-width: 400px; 
+            margin: 20px auto; 
+            padding: 20px; 
+            border-radius: 15px; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1); 
+            border-bottom: 4px solid var(--accent); 
+            box-sizing: border-box;
+        }
+
+        .input-group { margin-bottom: 20px; text-align: left; }
         .stats { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
-        .stat-item { background: rgba(255, 255, 255, 0.1); padding: 15px; border-radius: 10px; }
+        .stat-item { background: rgba(0, 0, 0, 0.05); padding: 15px; border-radius: 10px; }
         .stat-value { font-size: 1.5em; font-weight: bold; display: block; color: #000000; }
-        button { width: 100%; padding: 15px; font-size: 1.1em; font-weight: bold; cursor: pointer; border-radius: 8px; border: none; transition: 0.3s; }
-        .start { background:#ff3300; color: black; }
-        .stop { background:#ff3300; color: black; }
+
+        /* --- Map Styles --- */
+        #map {
+            height: 300px;
+            width: 100%;
+            max-width: 400px;
+            background: #000; 
+            border: 2px solid #ff3333; 
+            border-radius: 8px;
+            margin: 20px 0;
+            box-shadow: 
+                0 0 5px #fff,            
+                0 0 10px #fff,           
+                0 0 20px #ff3333,           
+                0 0 40px #ff3333,           
+                0 0 80px #ff3333;           
+        }
     </style>
 </head>
 <body>
 
-<div class="card">
-    <h2>Corre Fitness</h2>
-
-    <!-- User Input for Weight -->
-    <div class="input-group">
-        <label for="weight">Tu Peso (kg):</label>
-        <input type="number" id="weight" value="70" placeholder="Enter weight in kg">
+    <!-- 1. Music Player Application -->
+    <div class="app">
+        <h1>🎵 Music Player</h1>
+        <div class="cover">♫</div>
+        <div class="title" id="title">No song selected</div>
+        <div class="artist">WebView Music Player</div>
+        <div class="bar">
+            <input id="progress" type="range" min="0" max="100" value="0">
+            <div class="times"><span id="current">0:00</span><span id="duration">0:00</span></div>
+        </div>
+        <div class="controls">
+            <button class="btn" onclick="previous()">⏮</button>
+            <button class="btn play" id="play" onclick="toggle()">▶</button>
+            <button class="btn" onclick="next()">⏭</button>
+        </div>
+        <button class="action" onclick="chooseMusic()">📁 Add music from phone</button>
+        <input id="file" type="file" accept="audio/*" multiple>
+        <div class="playlist" id="playlist"></div>
     </div>
 
-    <div class="stats">
-        <div class="stat-item">
-            <span class="stat-value" id="distText">0.00</span>
-            <small>KM</small>
+    <!-- 2. Run Tracker Card -->
+    <div class="card">
+        <h2>Corre Fitness</h2>
+
+        <div class="input-group">
+            <label for="weight">Tu Peso (kg):</label>
+            <input type="number" id="weight" value="70" placeholder="Enter weight in kg">
         </div>
-        <div class="stat-item">
-            <span class="stat-value" id="calText">0</span>
-            <small>KCAL</small>
+
+        <div class="stats">
+            <div class="stat-item">
+                <span class="stat-value" id="distText">0.00</span>
+                <small>KM</small>
+            </div>
+            <div class="stat-item">
+                <span class="stat-value" id="calText">0</span>
+                <small>KCAL</small>
+            </div>
+            <div class="stat-item" style="grid-column: span 2;">
+                <span class="stat-value" id="timeText">00:00:00</span>
+                <small>DURACION</small>
+            </div>
         </div>
-        <div class="stat-item" style="grid-column: span 2;">
-            <span class="stat-value" id="timeText">00:00:00</span>
-            <small>DURACION</small>
-        </div>
+
+        <button id="mainBtn" class="start" onclick="toggleTracking()">EMPEZAR</button>
     </div>
 
-    <button id="mainBtn" class="start">EMPEZAR</button>
-</div>
-<button onclick="window.location.href='musica.html';" class="start" style="width: 100px; height: 50px; background-color: black; color: white; border: none; cursor: pointer;">
- INICIO
-</button>
+    <!-- Navigation Home Button -->
+    <button onclick="window.location.href='Welcome.html';" class="start" style="width: 100px; height: 50px; background-color: black; color: white; border: none; cursor: pointer; margin-bottom: 20px;">
+        INICIO
+    </button>
 
- <style>
-    #map {
-      height: 300px;
-  width: 80%;
-  background: #000; /* Dark background makes the glow pop */
-  border: 2px solid #ff3333; /* A thin light border acts as the "bulb" */
-  border-radius: 8px;
-  
-  /* The "Black Light" Glow Effect */
-  /* Format: x-offset y-offset blur-radius spread-radius color */
-  box-shadow: 
-    0 0 5px #fff,            /* Inner white core */
-    0 0 10px #fff,           /* Softer white core */
-    0 0 20px #ff3333,           /* Primary neon color (Cyan) */
-    0 0 40px #ff3333,           /* Wider glow */
-    0 0 80px #ff3333;           /* Outer ambient glow */
-    }
-  </style>
-</head>
-<body>
+    <!-- 3. Maps Visualization Container -->
+    <div id="map"></div>
 
 
-<div id="map"></div>
+    <!-- ================================================================= -->
+    <!-- JAVASCRIPT LOGIC                                                  -->
+    <!-- ================================================================= -->
 
-<script>
-  function initMap() {
-    const location = { lat: 3.4516, lng: -76.5320 };
+    <!-- Music Player Logic -->
+    <script>
+        let songs=[], index=-1, playing=false, audio=new Audio();
+        const playlist = document.getElementById('playlist');
+        const title = document.getElementById('title');
+        const play = document.getElementById('play');
+        const progress = document.getElementById('progress');
+        const current = document.getElementById('current');
+        const duration = document.getElementById('duration');
 
-    const map = new google.maps.Map(document.getElementById("map"), {
-      zoom: 10,
-      center: location
-    });
-  }
-</script>
+        function chooseMusic(){
+            if(window.Android){ Android.requestPermission(); }
+            document.getElementById('file').click();
+        }
+
+        document.getElementById('file').onchange=e=>{
+            songs=[...e.target.files].map(f=>({file:f,url:URL.createObjectURL(f),name:f.name}));
+            render(); 
+            if(songs.length) load(0);
+        };
+
+        function render(){
+            playlist.innerHTML=songs.map((s,i)=>`<div class="song" onclick="load(${i})">🎵 ${escapeHtml(s.name)}<br><small>Tap to play</small></div>`).join('');
+        }
+
+        function escapeHtml(s){
+            return s.replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))
+        }
+
+        function load(i){
+            if(!songs[i])return; 
+            index=i; 
+            title.textContent=songs[i].name; 
+            audio.src=songs[i].url; 
+            audio.load(); 
+            audio.play();
+            playing=true; 
+            play.textContent='⏸';
+            if(window.Android) Android.play(songs[i].url,songs[i].name);
+        }
+
+        function toggle(){
+            if(index<0){chooseMusic();return}
+            if(playing){
+                audio.pause(); 
+                if(window.Android)Android.pause();
+                play.textContent='▶';
+                playing=false;
+            } else {
+                audio.play();
+                if(window.Android)Android.resume();
+                play.textContent='⏸';
+                playing=true;
+            }
+        }
+
+        function previous(){ if(index>0) load(index-1); }
+        function next(){ if(index<songs.length-1) load(index+1); }
+
+        audio.ontimeupdate=()=>{
+            if(audio.duration){progress.value=audio.currentTime/audio.duration*100}
+            current.textContent=time(audio.currentTime);
+            duration.textContent=time(audio.duration);
+        }
+
+        progress.oninput=()=>{
+            if(audio.duration){
+                let s=progress.value/100*audio.duration;
+                audio.currentTime=s;
+                if(window.Android)Android.seek(s);
+            }
+        }
+
+        audio.onended=()=>next();
+
+        function time(s){
+            if(!isFinite(s))return'0:00';
+            s=Math.floor(s);
+            return Math.floor(s/60)+':'+String(s%60).padStart(2,'0');
+        }
+
+        window.onAndroidPermission=granted=>{
+            if(!granted) alert('Storage/audio permission was denied.');
+        }
+        window.androidReady=()=>{};
+    </script>
+
+    <!-- Google Maps Logic -->
+   
+
+   
+
+ 
+
 
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBl0Gn4VrRgPw98GLeKvX3xOW57xO6swnM&callback=initMap" async defer></script>
 

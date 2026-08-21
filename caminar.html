@@ -38,6 +38,24 @@
     </style>
 </head>
 <body>
+      <div class="app">
+        <h1>🎵 Music Player</h1>
+        <div class="cover">♫</div>
+        <div class="title" id="title">No song selected</div>
+        <div class="artist">WebView Music Player</div>
+        <div class="bar">
+            <input id="progress" type="range" min="0" max="100" value="0">
+            <div class="times"><span id="current">0:00</span><span id="duration">0:00</span></div>
+        </div>
+        <div class="controls">
+            <button class="btn" onclick="previous()">⏮</button>
+            <button class="btn play" id="play" onclick="toggle()">▶</button>
+            <button class="btn" onclick="next()">⏭</button>
+        </div>
+        <button class="action" onclick="chooseMusic()">📁 Add music from phone</button>
+        <input id="file" type="file" accept="audio/*" multiple>
+        <div class="playlist" id="playlist"></div>
+    </div>
 
 <div class="card">
     <h2>Camina Fitness</h2>
@@ -109,6 +127,91 @@
 
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCpuU0UPQZcJJf8y-nb1v1G8P0KR-XVHJs&callback=initMap" async defer></script>
 
+<script>
+        let songs=[], index=-1, playing=false, audio=new Audio();
+        const playlist = document.getElementById('playlist');
+        const title = document.getElementById('title');
+        const play = document.getElementById('play');
+        const progress = document.getElementById('progress');
+        const current = document.getElementById('current');
+        const duration = document.getElementById('duration');
+
+        function chooseMusic(){
+            if(window.Android){ Android.requestPermission(); }
+            document.getElementById('file').click();
+        }
+
+        document.getElementById('file').onchange=e=>{
+            songs=[...e.target.files].map(f=>({file:f,url:URL.createObjectURL(f),name:f.name}));
+            render(); 
+            if(songs.length) load(0);
+        };
+
+        function render(){
+            playlist.innerHTML=songs.map((s,i)=>`<div class="song" onclick="load(${i})">🎵 ${escapeHtml(s.name)}<br><small>Tap to play</small></div>`).join('');
+        }
+
+        function escapeHtml(s){
+            return s.replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))
+        }
+
+        function load(i){
+            if(!songs[i])return; 
+            index=i; 
+            title.textContent=songs[i].name; 
+            audio.src=songs[i].url; 
+            audio.load(); 
+            audio.play();
+            playing=true; 
+            play.textContent='⏸';
+            if(window.Android) Android.play(songs[i].url,songs[i].name);
+        }
+
+        function toggle(){
+            if(index<0){chooseMusic();return}
+            if(playing){
+                audio.pause(); 
+                if(window.Android)Android.pause();
+                play.textContent='▶';
+                playing=false;
+            } else {
+                audio.play();
+                if(window.Android)Android.resume();
+                play.textContent='⏸';
+                playing=true;
+            }
+        }
+
+        function previous(){ if(index>0) load(index-1); }
+        function next(){ if(index<songs.length-1) load(index+1); }
+
+        audio.ontimeupdate=()=>{
+            if(audio.duration){progress.value=audio.currentTime/audio.duration*100}
+            current.textContent=time(audio.currentTime);
+            duration.textContent=time(audio.duration);
+        }
+
+        progress.oninput=()=>{
+            if(audio.duration){
+                let s=progress.value/100*audio.duration;
+                audio.currentTime=s;
+                if(window.Android)Android.seek(s);
+            }
+        }
+
+        audio.onended=()=>next();
+
+        function time(s){
+            if(!isFinite(s))return'0:00';
+            s=Math.floor(s);
+            return Math.floor(s/60)+':'+String(s%60).padStart(2,'0');
+        }
+
+        window.onAndroidPermission=granted=>{
+            if(!granted) alert('Storage/audio permission was denied.');
+        }
+        window.androidReady=()=>{};
+    </script>
 
 
 

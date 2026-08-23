@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube Channel Feed Finder</title>
+    <style>
+        :root {
+            --yt-red: #ff0000;
+            --yt-dark: #0f0f0f;
+            --bg-gray: #f9f9f9;
+            --border-color: #e5e5e5;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: var(--bg-gray);
+            color: #333;
+        }
+
+        .container {
+            max-width: 650px;
+            margin: 40px auto;
+            background: #ffffff;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.06);
+            border: 1px solid var(--border-color);
+        }
+
+        header h1 {
+            color: var(--yt-dark);
+            margin: 0 0 25px 0;
+            font-size: 1.8rem;
+            text-align: center;
+        }
+
+        header h1 span {
+            color: var(--yt-red);
+        }
+
+        .search-box {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+
+        .search-box input {
+            flex: 1;
+            padding: 12px 16px;
+            font-size: 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: 24px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .search-box input:focus {
+            border-color: #a4a4a4;
+        }
+
+        .search-box button {
+            background-color: var(--yt-dark);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 24px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .search-box button:hover {
+            background-color: #272727;
+        }
+
+        .channel-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--yt-red);
+        }
+
+        .channel-title {
+            font-size: 1.3rem;
+            color: var(--yt-dark);
+            margin: 0;
+        }
+
+        .news-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .news-item {
+            padding: 14px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            background-color: #fafafa;
+            transition: background-color 0.2s, transform 0.1s;
+        }
+
+        .news-item:hover {
+            background-color: #f1f1f1;
+            transform: translateY(-1px);
+        }
+
+        .news-title {
+            font-weight: 600;
+            font-size: 1rem;
+            margin: 0 0 6px 0;
+            line-height: 1.4;
+        }
+
+        .news-title a {
+            color: var(--yt-dark);
+            text-decoration: none;
+        }
+
+        .news-title a:hover {
+            color: var(--yt-red);
+        }
+
+        .news-date {
+            font-size: 0.8rem;
+            color: #606060;
+        }
+
+        .status-msg {
+            font-style: italic;
+            color: #606060;
+            text-align: center;
+            padding: 20px 0;
+        }
+
+        .error {
+            color: var(--yt-red);
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1><span>YouTube</span> Channel Feed Finder</h1>
+        </header>
+
+        <!-- Search Interface -->
+        <div class="search-box">
+            <input type="text" id="channel-input" placeholder="Type channel name (e.g., BBC News, MKBHD)...">
+            <button id="search-btn">Search</button>
+        </div>
+
+        <!-- Dynamic Results Area -->
+        <section id="results-section" style="display: none;">
+            <div class="channel-header">
+                <h2 class="channel-title" id="active-channel-name">Channel Videos</h2>
+            </div>
+            <div id="video-list" class="news-list"></div>
+        </section>
+
+        <!-- Placeholder status messages -->
+        <div id="status-display" class="status-msg">
+            Enter a channel name above to see their latest videos.
+        </div>
+    </div>
+
+    <script>
+        // ⚠️ REQUIREMENT: Insert your real Google Cloud YouTube Data API v3 Key below
+        const YOUTUBE_API_KEY = 'AIzaSyB7-XQ5lIzmWoxizjKIEEGcUgG8a35hxd0'; 
+
+        const searchBtn = document.getElementById('search-btn');
+        const channelInput = document.getElementById('channel-input');
+        const resultsSection = document.getElementById('results-section');
+        const videoList = document.getElementById('video-list');
+        const statusDisplay = document.getElementById('status-display');
+        const activeChannelName = document.getElementById('active-channel-name');
+
+        // Main search controller
+        async function handleSearch() {
+            const query = channelInput.trim ? channelInput.value.trim() : channelInput.value;
+            
+            if (!query) {
+                showStatus('Please enter a channel name first.', true);
+                return;
+            }
+
+            if (YOUTUBE_API_KEY === 'AIzaSyB7-XQ5lIzmWoxizjKIEEGcUgG8a35hxd0') {
+                showStatus('⚠️ Setup required: Please open the HTML code and replace "YOUR_API_KEY_HERE" with your actual Google Cloud API key.', true);
+                return;
+            }
+
+            showStatus('Searching for channel...');
+            resultsSection.style.display = 'none';
+
+            try {
+                // Step 1: Find the Channel ID from the text input name
+                const searchChannelUrl = `https://googleapis.com{AIzaSyB7-XQ5lIzmWoxizjKIEEGcUgG8a35hxd0}&q=${encodeURIComponent(query)}&type=channel&part=snippet&maxResults=1`;
+                
+                const channelResponse = await fetch(searchChannelUrl);
+                if (!channelResponse.ok) throw new Error('Failed to reach YouTube API.');
+                
+                const channelData = await channelResponse.json();
+                
+                if (!channelData.items || channelData.items.length === 0) {
+                    throw new Error('No channel found matching that name.');
+                }
+
+                const channelId = channelData.items[0].id.channelId;
+                const channelTitle = channelData.items[0].snippet.channelTitle;
+
+                // Step 2: Fetch the latest 5 videos from that Channel ID
+                showStatus('Fetching latest videos...');
+                const videosUrl = `https://googleapis.com{AIzaSyB7-XQ5lIzmWoxizjKIEEGcUgG8a35hxd0}&channelId=${channelId}&part=snippet,id&order=date&type=video&maxResults=5`;
+                
+                const videosResponse = await fetch(videosUrl);
+                if (!videosResponse.ok) throw new Error('Failed to retrieve videos for this channel.');
+                
+                const videosData = await videosResponse.json();
+                
+                // Clear and update DOM
+                videoList.innerHTML = '';
+                statusDisplay.style.display = 'none';
+                activeChannelName.textContent = `📺 Latest from ${channelTitle}`;
+
+                if (!videosData.items || videosData.items.length === 0) {
+                    showStatus('This channel has no public videos available.', false);
+                    return;
+                }
+
+                // Render video list
+                videosData.items.forEach(item => {
+                    const formattedDate = new Date(item.snippet.publishedAt).toLocaleDateString(undefined, {
+                        year: 'numeric', month: 'short', day: 'numeric'
+                    });
+
+                    const itemHtml = `
+                        <article class="news-item">
+                            <h3 class="news-title">
+                                <a href="https://youtube.com{item.id.videoId}" target="_blank" rel="noopener">${item.snippet.title}</a>
+                            </h3>
+                            <div class="news-date">⏱️ Published: ${formattedDate}</div>
+                        </article>
+                    `;
+                    videoList.innerHTML += itemHtml;
+                });
+
+                resultsSection.style.display = 'block';
+
+            } catch (err) {
+                showStatus(`Error: ${err.message}`, true);
+            }
+        }
+
+        // Helper to update status messages
+        function showStatus(message, isError = false) {
+            resultsSection.style.display = 'none';
+            statusDisplay.style.display = 'block';
+            statusDisplay.textContent = message;
+            if (isError) {
+                statusDisplay.classList.add('error');
+            } else {
+                statusDisplay.classList.remove('error');
+            }
+        }
+
+        // Event listeners for search triggers
+        searchBtn.addEventListener('click', handleSearch);
+        channelInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') handleSearch();
+        });
+    </script>
+</body>
+</html>
+

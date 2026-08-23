@@ -171,7 +171,7 @@
 
     <script>
         // ⚠️ INSERT YOUR ACTUAL YOUTUBE DATA API V3 KEY HERE
-        const YOUTUBE_API_KEY = 'YOUR_API_KEY_HERE'; 
+        const YOUTUBE_API_KEY = 'AIzaSyB7-XQ5lIzmWoxizjKIEEGcUgG8a35hxd0'; 
 
         const searchBtn = document.getElementById('search-btn');
         const channelInput = document.getElementById('channel-input');
@@ -188,8 +188,8 @@
                 return;
             }
 
-            if (YOUTUBE_API_KEY === 'YOUR_API_KEY_HERE') {
-                showStatus('⚠️ Setup required: Please replace "YOUR_API_KEY_HERE" with your actual Google Cloud API key.', true);
+            if (YOUTUBE_API_KEY === 'AIzaSyB7-XQ5lIzmWoxizjKIEEGcUgG8a35hxd0') {
+                showStatus('⚠️ Setup required: Please replace "AIzaSyB7-XQ5lIzmWoxizjKIEEGcUgG8a35hxd0" with your actual Google Cloud API key.', true);
                 return;
             }
 
@@ -198,7 +198,7 @@
 
             try {
                 // Step 1: Find Channel metadata using search query
-                const searchChannelUrl = `https://googleapis.com{YOUTUBE_API_KEY}&q=${encodeURIComponent(query)}&type=channel&part=snippet&maxResults=1`;
+                const searchChannelUrl = `https://googleapis.com{AIzaSyB7-XQ5lIzmWoxizjKIEEGcUgG8a35hxd0}&q=${encodeURIComponent(query)}&type=channel&part=snippet&maxResults=1`;
                 
                 const channelResponse = await fetch(searchChannelUrl);
                 if (!channelResponse.ok) throw new Error('Failed to reach YouTube API.');
@@ -215,7 +215,7 @@
 
                 // Step 2: Fetch 5 latest videos uploaded by this Channel ID
                 showStatus('Fetching latest videos...');
-                const videosUrl = `https://googleapis.com{YOUTUBE_API_KEY}&channelId=${channelId}&part=snippet,id&order=date&type=video&maxResults=5`;
+                const videosUrl = `https://googleapis.com{AIzaSyB7-XQ5lIzmWoxizjKIEEGcUgG8a35hxd0}&channelId=${channelId}&part=snippet,id&order=date&type=video&maxResults=5`;
                 
                 const videosResponse = await fetch(videosUrl);
                 if (!videosResponse.ok) throw new Error('Failed to retrieve videos for this channel.');

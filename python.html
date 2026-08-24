@@ -51,160 +51,194 @@ Presiona Iniciar<br>Luego habla...
 
 <script>
 
-const SpeechRecognition =
-window.SpeechRecognition ||
-window.webkitSpeechRecognition;
 
-if(!SpeechRecognition){
+
+// 1. Configuración de API e Inicialización
+const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+if (!SpeechRecognition) {
     alert("El reconocimiento de voz no es compatible con este navegador.");
 }
 
 const recognition = new SpeechRecognition();
-
-// Cambiado a español
 recognition.lang = "es-ES";
 recognition.continuous = true;
 recognition.interimResults = false;
 
+// 2. Elementos del DOM
 const box = document.getElementById("box");
+const startBtn = document.getElementById("start");
 
-function speak(message){
+// 3. Funciones Auxiliares
+function speak(message) {
     const speech = new SpeechSynthesisUtterance(message);
-    // Cambiado a español
     speech.lang = "es-ES";
     speech.rate = 1;
     speech.pitch = 1;
-    speechSynthesis.speak(speech);
+    window.speechSynthesis.speak(speech);
 }
 
-document.getElementById("start").onclick = function(){
-    recognition.start();
-};
+function obtenerFechaActual() {
+    return new Date().toLocaleDateString('es-ES', { 
+        weekday: 'long', 
+        year: 'numeric', 
+        month: 'long', 
+        day: 'numeric' 
+    });
+}
 
-recognition.onend = function(){
-    recognition.start();
-};
+function obtenerHoraActual() {
+    return new Date().toLocaleTimeString('es-ES');
+}
 
-recognition.onresult = function(event){
+// 4. Diccionario de Comandos (Configuración de Respuestas)
+const comandos = [
+    {
+        activadores: ["hola"],
+        accion: () => {
+            box.style.background = "orange";
+            box.innerHTML = "¡Hola Humano!";
+            speak("¡Hola! Un placer conocerte.");
+        }
+    },
+    {
+        activadores: ["buenos días"],
+        accion: () => {
+            box.style.background = "green";
+            box.innerHTML = "¡Buenos Días!";
+            speak("Buenos días. Espero que tengas un día maravilloso.");
+        }
+    },
+    {
+        activadores: ["adiós", "chao"],
+        accion: () => {
+            box.style.background = "black";
+            box.innerHTML = "¡Adiós!";
+            speak("Adiós. Nos vemos luego.");
+        }
+    },
+    {
+        activadores: ["rojo"],
+        accion: () => {
+            document.body.style.background = "red";
+            speak("Cambiando el fondo a rojo.");
+        }
+    },
+    {
+        activadores: ["verde"],
+        accion: () => {
+            document.body.style.background = "green";
+            speak("Cambiando el fondo a verde.");
+        }
+    },
+    {
+        activadores: ["azul"],
+        accion: () => {
+            document.body.style.background = "blue";
+            speak("Cambiando el fondo a azul.");
+        }
+    },
+    {
+        activadores: ["blanco"],
+        accion: () => {
+            document.body.style.background = "white";
+            speak("Cambiando el fondo a blanco.");
+        }
+    },
+    {
+        activadores: ["cuál es la fecha", "fecha de hoy", "qué día es hoy", "que fecha es hoy"],
+        accion: () => {
+            const fecha = obtenerFechaActual();
+            box.innerHTML = fecha;
+            speak("Hoy es " + fecha);
+        }
+    },
+    {
+        activadores: ["qué hora es"],
+        accion: () => {
+            const hora = obtenerHoraActual();
+            box.innerHTML = hora;
+            speak("La hora es " + hora);
+        }
+    },
+    {
+        activadores: ["cómo estás alma de atleta"],
+        accion: () => {
+            box.innerHTML = "¡Estoy excelente!";
+            speak("Estoy excelente");
+        }
+    },
+    {
+        activadores: ["cómo estás"],
+        accion: () => {
+            box.innerHTML = "¡Estoy excelente!";
+            speak("Estoy excelente. Gracias por preguntar.");
+        }
+    },
+    {
+        activadores: ["cómo te llamas", "cual es tu nombre"],
+        accion: () => {
+            box.innerHTML = "¡Mi nombre es alma de atleta!";
+            speak("Mi nombre es alma de atleta.");
+        }
+    },
+    {
+        activadores: ["quien te creo", "quien es tu creador"],
+        accion: () => {
+            box.innerHTML = "¡Mi creador es Cristian Arcos el ambientalista de la bicicleta!";
+            speak("Mi creador es Cristian Arcos el ambientalista de la bicicleta");
+        }
+    },
+    {
+        activadores: ["de dónde viene el café"],
+        accion: () => {
+            box.innerHTML = "El café viene de Etiopía en África";
+            speak("El café es originario de Etiopía en África.");
+        }
+    },
+    {
+        activadores: ["gracias"],
+        accion: () => {
+            box.innerHTML = "¡De nada!";
+            speak("De nada.");
+        }
+    },
+    {
+        activadores: ["limpiar", "borrar"],
+        accion: () => {
+            document.body.style.background = "white";
+            box.style.background = "#555";
+            box.innerHTML = "Listo para tu siguiente comando.";
+            speak("Pantalla limpia.");
+        }
+    }
+];
 
-    let text = event.results[event.results.length-1][0].transcript.toLowerCase();
+// 5. Control de Eventos de Voz
+if (startBtn) {
+    startBtn.onclick = () => recognition.start();
+}
 
+recognition.onend = () => recognition.start();
+
+recognition.onerror = (e) => console.error("Error de reconocimiento:", e);
+
+recognition.onresult = (event) => {
+    const text = event.results[event.results.length - 1][0].transcript.toLowerCase().trim();
     box.innerHTML = text;
 
-    if(text.includes("hola")){
-        box.style.background="orange";
-        box.innerHTML="¡Hola Humano!";
-        speak("¡Hola! Un placer conocerte.");
-    }
+    // Busca si el texto coincide con algún activador del diccionario
+    const comandoEncontrado = comandos.find(comando => 
+        comando.activadores.some(activador => text.includes(activador))
+    );
 
-    else if(text.includes("buenos días")){
-        box.style.background="green";
-        box.innerHTML="¡Buenos Días!";
-        speak("Buenos días. Espero que tengas un día maravilloso.");
-    }
-
-    else if(text.includes("adiós") || text.includes("chao")){
-        box.style.background="black";
-        box.innerHTML="¡Adiós!";
-        speak("Adiós. Nos vemos luego.");
-    }
-
-    else if(text.includes("rojo")){
-        document.body.style.background="red";
-        speak("Cambiando el fondo a rojo.");
-    }
-
-    else if(text.includes("verde")){
-        document.body.style.background="green";
-        speak("Cambiando el fondo a verde.");
-    }
-
-    else if(text.includes("azul")){
-        document.body.style.background="blue";
-        speak("Cambiando el fondo a azul.");
-    }
-
-    else if(text.includes("blanco")){
-        document.body.style.background="white";
-        speak("Cambiando el fondo a blanco.");
-    }
-
-    else if(text.includes("cuál es la fecha") || text.includes("fecha de hoy") || text.includes("qué día es hoy")){
-        let today = new Date().toLocaleDateString('es-ES', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
-        box.innerHTML = today;
-        speak("Hoy es " + today);
-    }
-           else if(text.includes("que fecha es hoy") || text.includes("fecha de hoy") || text.includes("qué día es hoy")){
-        let today = new Date().toLocaleDateString('es-ES', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
-        box.innerHTML = today;
-        speak("Hoy es " + today);
-    }
-
-    else if(text.includes("qué hora es")){
-        let time = new Date().toLocaleTimeString('es-ES');
-        box.innerHTML = time;
-        speak("La hora es " + time);
-    }
-
-    else if(text.includes("cómo estás")){
-        box.innerHTML="¡Estoy excelente!";
-        speak("Estoy excelente. Gracias por preguntar.");
-    }
-
-         else if(text.includes("cómo estás alma de atleta")){
-        box.innerHTML="¡Estoy excelente!";
-        speak("Estoy excelente");
-    }
-
-
-              else if(text.includes("cómo te llamas")){
-        box.innerHTML="¡Mi nombre es alma de atleta!";
-        speak("Mi nombre es alma de atleta.");
-    }
-
-                     else if(text.includes("cual es tu nombre")){
-        box.innerHTML="¡Mi nombre es alma de atleta!";
-        speak("Mi nombre es alma de atleta.");
-    }
-
-                           else if(text.includes("Quien te creo")){
-        box.innerHTML="¡Mi creador es Cristian Arcos el ambientalista de la bicicleta!";
-        speak("Mi creador es Cristian Arcos el ambientalista de la bicicleta");
-    }
-
-
-                                else if(text.includes("Quien es tu creador")){
-        box.innerHTML="¡Mi creador es Cristian Arcos el ambientalista de la bicicleta!";
-        speak("Mi creador es Cristian Arcos el ambientalista de la bicicleta");
-    }
-
-                                    
-    else if(text.includes("de dónde viene el café")){
-        box.innerHTML="El café viene de Etiopía en África";
-        speak("El café es originario de Etiopía en África.");
-    }
-
-    else if(text.includes("gracias")){
-        box.innerHTML="¡De nada!";
-        speak("De nada.");
-    }
-
-    else if(text.includes("limpiar") || text.includes("borrar")){
-        document.body.style.background="white";
-        box.style.background="#555";
-        box.innerHTML="Listo para tu siguiente comando.";
-        speak("Pantalla limpia.");
-    }
-
-    else{
+    if (comandoEncontrado) {
+        comandoEncontrado.accion();
+    } else {
         speak("Lo siento, todavía no conozco ese comando.");
     }
-
 };
 
-recognition.onerror = function(e){
-    console.log(e);
-};
 
 </script>
 

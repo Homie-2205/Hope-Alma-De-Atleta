@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Voice Assistant</title>
+<title>Asistente de Voz</title>
 
 <style>
 body{
@@ -43,10 +43,10 @@ button{
 </head>
 <body>
 
-<button id="start">🎤 Start Assistant</button>
+<button id="start">🎤 Iniciar Asistente</button>
 
 <div id="box">
-Press Start<br>Then speak...
+Presiona Iniciar<br>Luego habla...
 </div>
 
 <script>
@@ -56,12 +56,13 @@ window.SpeechRecognition ||
 window.webkitSpeechRecognition;
 
 if(!SpeechRecognition){
-    alert("Speech Recognition is not supported in this browser.");
+    alert("El reconocimiento de voz no es compatible con este navegador.");
 }
 
 const recognition = new SpeechRecognition();
 
-recognition.lang = "en-US";
+// Cambiado a español
+recognition.lang = "es-ES";
 recognition.continuous = true;
 recognition.interimResults = false;
 
@@ -69,7 +70,8 @@ const box = document.getElementById("box");
 
 function speak(message){
     const speech = new SpeechSynthesisUtterance(message);
-    speech.lang = "en-US";
+    // Cambiado a español
+    speech.lang = "es-ES";
     speech.rate = 1;
     speech.pitch = 1;
     speechSynthesis.speak(speech);
@@ -89,80 +91,80 @@ recognition.onresult = function(event){
 
     box.innerHTML = text;
 
-    if(text.includes("hello")){
+    if(text.includes("hola")){
         box.style.background="orange";
-        box.innerHTML="Hello Human!";
-        speak("Hello! Nice to meet you.");
+        box.innerHTML="¡Hola Humano!";
+        speak("¡Hola! Un placer conocerte.");
     }
 
-    else if(text.includes("good morning")){
+    else if(text.includes("buenos días")){
         box.style.background="green";
-        box.innerHTML="Good Morning!";
-        speak("Good morning. I hope you have a wonderful day.");
+        box.innerHTML="¡Buenos Días!";
+        speak("Buenos días. Espero que tengas un día maravilloso.");
     }
 
-    else if(text.includes("goodbye")){
+    else if(text.includes("adiós") || text.includes("chao")){
         box.style.background="black";
-        box.innerHTML="Goodbye!";
-        speak("Goodbye. See you later.");
+        box.innerHTML="¡Adiós!";
+        speak("Adiós. Nos vemos luego.");
     }
 
-    else if(text.includes("red")){
+    else if(text.includes("rojo")){
         document.body.style.background="red";
-        speak("Changing background to red.");
+        speak("Cambiando el fondo a rojo.");
     }
 
-    else if(text.includes("green")){
+    else if(text.includes("verde")){
         document.body.style.background="green";
-        speak("Changing background to green.");
+        speak("Cambiando el fondo a verde.");
     }
 
-    else if(text.includes("blue")){
+    else if(text.includes("azul")){
         document.body.style.background="blue";
-        speak("Changing background to blue.");
+        speak("Cambiando el fondo a azul.");
     }
 
-    else if(text.includes("white")){
+    else if(text.includes("blanco")){
         document.body.style.background="white";
-        speak("Changing background to white.");
+        speak("Cambiando el fondo a blanco.");
     }
 
-    else if(text.includes("what is the date") || text.includes("today's date")){
-        let today = new Date().toDateString();
+    else if(text.includes("cuál es la fecha") || text.includes("fecha de hoy") || text.includes("qué día es hoy")){
+        let today = new Date().toLocaleDateString('es-ES', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
         box.innerHTML = today;
-        speak("Today is " + today);
+        speak("Hoy es " + today);
     }
 
-    else if(text.includes("what time is it")){
-        let time = new Date().toLocaleTimeString();
+    else if(text.includes("qué hora es")){
+        let time = new Date().toLocaleTimeString('es-ES');
         box.innerHTML = time;
-        speak("The time is " + time);
+        speak("La hora es " + time);
     }
 
-    else if(text.includes("how are you")){
-        box.innerHTML="I'm doing great!";
-        speak("I'm doing great. Thank you for asking.");
+    else if(text.includes("cómo estás")){
+        box.innerHTML="¡Estoy excelente!";
+        speak("Estoy excelente. Gracias por preguntar.");
     }
 
-         else if(text.includes("where the coffee come from")){
-        box.innerHTML="The Coffee comes from Ethiopia in Africa";
-        speak("I'm doing great. Thank you for asking.");
+    else if(text.includes("de dónde viene el café")){
+        box.innerHTML="El café viene de Etiopía en África";
+        speak("El café es originario de Etiopía en África.");
     }
 
-    else if(text.includes("thank you")){
-        box.innerHTML="You're welcome!";
-        speak("You're welcome.");
+    else if(text.includes("gracias")){
+        box.innerHTML="¡De nada!";
+        speak("De nada.");
     }
 
-    else if(text.includes("clear")){
+    else if(text.includes("limpiar") || text.includes("borrar")){
         document.body.style.background="white";
         box.style.background="#555";
-        box.innerHTML="Ready for your next command.";
-        speak("Screen cleared.");
+        box.innerHTML="Listo para tu siguiente comando.";
+        speak("Pantalla limpia.");
     }
 
     else{
-        speak("Sorry, I don't know that command yet.");
+        speak("Lo siento, todavía no conozco ese comando.");
     }
 
 };

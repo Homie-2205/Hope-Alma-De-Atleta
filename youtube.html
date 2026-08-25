@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Lista de Personas con Python</title>
+    <!-- Cargamos Brython para ejecutar Python en el navegador -->
+    <script type="text/javascript" src="https://cloudflare.com"></script>
+</head>
+<body onload="brython()">
+
+    <h1>Lista de Usuarios</h1>
+    
+    <!-- Aquí es donde Python insertará el texto -->
+    <ul id="lista-personas"></ul>
+
+    <!-- Código Python -->
+    <script type="text/python">
+        from browser import document, html
+
+        # Definimos los datos en Python
+        personas = [
+            {"nombre": "Maira", "edad": "32 años"},
+            {"nombre": "Kevin", "edad": "34 años"},
+            {"nombre": "Andres", "edad": "24 años"}
+        ]
+
+        # Buscamos el contenedor HTML por su ID
+        contenedor = document["lista-personas"]
+
+        # Recorremos los datos y los agregamos al HTML
+        for persona in personas:
+            texto = f"{persona['nombre']} {persona['edad']}"
+            # Creamos un elemento de lista <li> y lo añadimos al contenedor <ul>
+            contenedor <= html.LI(texto)
+    </script>
+
+</body>
+</html>
+

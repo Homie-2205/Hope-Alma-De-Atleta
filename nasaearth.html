@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NASA Map Fix</title>
+    
+    <!-- 1. Leaflet styles and scripts loaded from the internet CDN -->
+    <link rel="stylesheet" href="https://unpkg.com" />
+    <script src="https://unpkg.com"></script>
+
+    <style>
+        /* 2. Critical: Give the map an absolute height or it stays invisible */
+        html, body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            background-color: black;
+        }
+        #map {
+            width: 100%;
+            height: 100vh; /* 100% of the viewport height */
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 3. The actual HTML container for the map -->
+    <div id="map"></div>
+
+    <script>
+        // 4. Initialize the Leaflet map object
+        const map = L.map('map').setView([0, 0], 2);
+
+        // 5. Connect to NASA's server using a stable historical snapshot date
+        // (This prevents errors if NASA's servers are slow to upload today's data)
+        L.tileLayer('https://nasa.gov{time}/{tilematrixset}/{z}/{y}/{x}.jpg', {
+            tilematrixset: 'GoogleMapsCompatible_Level9',
+            time: '2024-08-01', 
+            tileSize: 256,
+            bounds: [[-85.05, -180], [85.05, 180]],
+            attribution: 'NASA GIBS'
+        }).addTo(map);
+    </script>
+
+</body>
+</html>

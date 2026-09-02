@@ -1,25 +1,13 @@
 const express = require('express');
 const app = express();
 
-// Middleware
-app.use(express.json());
+// Render automatically assigns a PORT variable
+const PORT = process.env.PORT || 3000;
 
-// Example route
 app.get('/', (req, res) => {
-  res.send('Node + FFmpeg server is running');
+    res.send('Server running successfully on Render!');
 });
 
-// Import and use other files
-const someModule = require('./index.html');
-
-// Example endpoint using another file
-app.get('/process', (req, res) => {
-  const result = someModule.doSomething();
-  res.json({ result });
-});
-
-// Start server on Render port
-const port = process.env.PORT || 10000;
-app.listen(port, () => {
-  console.log(`Server running on port ${port}`);
+app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
 });

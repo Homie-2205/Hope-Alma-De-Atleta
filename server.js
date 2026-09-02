@@ -10,7 +10,7 @@ app.get('/', (req, res) => {
 });
 
 // Import and use other files
-const someModule = require('./index');
+const someModule = require('./index.html');
 
 // Example endpoint using another file
 app.get('/process', (req, res) => {

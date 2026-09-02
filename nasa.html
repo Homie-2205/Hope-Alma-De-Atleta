@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NASA APOD API Example</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 800px; margin: 40px auto; padding: 0 20px; }
+        img { max-width: 100%; height: auto; border-radius: 8px; }
+    </style>
+</head>
+<body>
+
+    <h1 id="title">Loading NASA Space Data...</h1>
+    <p id="date"></p>
+    <div id="media-container"></div>
+    <p id="explanation"></p>
+
+    <script>
+        // NASA provides a free 'DEMO_KEY' for testing so you can start immediately
+        const NASA_URL = "https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY";
+
+        async function getNasaData() {
+            try {
+                // Fetch data from NASA's servers
+                const response = await fetch(NASA_URL);
+                const data = await response.json();
+
+                // Inject the API data directly into our HTML elements
+                document.getElementById('title').textContent = data.title;
+                document.getElementById('date').textContent = data.date;
+                document.getElementById('explanation').textContent = data.explanation;
+
+                // Handle both images and videos (sometimes NASA shares YouTube clips)
+                const container = document.getElementById('media-container');
+                if (data.media_type === 'image') {
+                    container.innerHTML = `<img src="${data.url}" alt="${data.title}">`;
+                } else if (data.media_type === 'video') {
+                    container.innerHTML = `<iframe width="560" height="315" src="${data.url}" frameborder="0" allowfullscreen></iframe>`;
+                }
+
+            } catch (error) {
+                console.error("Error retrieving NASA API data:", error);
+                document.getElementById('title').textContent = "Failed to load space data.";
+            }
+        }
+
+        // Run the function when the page loads
+        getNasaData();
+    </script>
+</body>
+</html>

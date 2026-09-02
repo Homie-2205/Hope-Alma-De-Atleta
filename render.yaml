@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: my-node-service
+    runtime: node
+    repo: https://github.com # Replace with your repo
+    plan: free # Options: free, starter, standard
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: NODE_VERSION
+        value: 20.0.0 # Set your desired Node version

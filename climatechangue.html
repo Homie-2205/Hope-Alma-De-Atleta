@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Webpage</title>
+</head>
+<html>
+  <body>
+
+    
+
+
+
+<script>
+
+import { fetchWeatherApi } from "openmeteo";
+
+const params = {
+	latitude: 52.52,
+	longitude: 13.41,
+	start_date: "1950-01-01",
+	end_date: "2050-12-31",
+	models: ["CMCC_CM2_VHR4", "FGOALS_f3_H", "HiRAM_SIT_HR", "MRI_AGCM3_2_S", "EC_Earth3P_HR", "MPI_ESM1_2_XR", "NICAM16_8S"],
+	daily: "temperature_2m_max",
+};
+const url = "https://climate-api.open-meteo.com/v1/climate";
+const responses = await fetchWeatherApi(url, params);
+
+// Process 1 location and 7 models
+for (const response of responses) {
+	// Attributes for timezone and location
+	const latitude = response.latitude();
+	const longitude = response.longitude();
+	const elevation = response.elevation();
+	const utcOffsetSeconds = response.utcOffsetSeconds();
+
+
+
+
+
+  
+
+	console.log(
+		`\nCoordinates: ${latitude}°N ${longitude}°E`,
+		`\nElevation: ${elevation}m asl`,
+		`\nTimezone difference to GMT+0: ${utcOffsetSeconds}s`,
+		`\nModel Nº: ${response.model()}`,
+	);
+	
+	const daily = response.daily()!;
+	
+	// Note: The order of weather variables in the URL query and the indices below need to match!
+	const weatherData = {
+		daily: {
+			time: Array.from(
+				{ length: (Number(daily.timeEnd()) - Number(daily.time())) / daily.interval() }, 
+				(_ , i) => new Date((Number(daily.time()) + i * daily.interval() + utcOffsetSeconds) * 1000)
+			),
+			temperature_2m_max: daily.variables(0)!.valuesArray(),
+		},
+	};
+	
+	// The 'weatherData' object now contains a simple structure, with arrays of datetimes and weather information
+	console.log("\nDaily data:\n", weatherData.daily)
+}
+
+</script>
+
+
+
+  </body>
+</html>

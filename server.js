@@ -1,11 +1,14 @@
 const express = require('express');
+const path = require('path');
 const app = express();
-
-// Render automatically assigns a PORT variable
 const PORT = process.env.PORT || 3000;
 
+// 1. Serve other static assets (CSS, JS, Images) if they are in the root
+app.use(express.static(path.join(__dirname, '.')));
+
+// 2. Serve index.html when a user visits the root URL '/'
 app.get('/', (req, res) => {
-    res.send('Server running successfully on Render!');
+    res.sendFile(path.join(__dirname, 'index.html'));
 });
 
 app.listen(PORT, () => {

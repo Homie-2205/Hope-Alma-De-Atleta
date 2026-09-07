@@ -8,13 +8,14 @@
 <html>
   <body>
 
-    
+    <iframe src="https://climate.nasa.gov/embed/127" width="768" height="450" scrolling="no" frameborder="0"></iframe>
+
 
 
 
 <script>
 
-	npm install openmeteo
+
 
 import { fetchWeatherApi } from "openmeteo";
 
@@ -69,6 +70,9 @@ for (const response of responses) {
 
 </script>
 
+
+	  pip install openmeteo-requests
+pip install requests-cache retry-requests numpy pandas
 
 
   </body>

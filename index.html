@@ -143,31 +143,31 @@ body{
         <div class="center">
             <h1>ROMPE<br><span>LOS</span><br>LÍMITES</h1>
 
-<audio id="myAudio" loop>
-  <source src="grito.mp3" type="audio/mpeg">
-  Your browser does not support the audio element.
+<!-- The controls attribute is removed to keep it small and completely hidden -->
+<audio id="myAudio">
+  <source src="Michael.mp3" type="audio/mpeg">
 </audio>
 
 <script>
-const startAudio = () => {
+// Function that plays the audio and immediately cleans itself up
+function playOnce() {
     const audio = document.getElementById('myAudio');
+    
     audio.play().then(() => {
-        // Audio started successfully, remove all listeners
-        window.removeEventListener('mousemove', startAudio);
-        window.removeEventListener('touchstart', startAudio);
-        window.removeEventListener('keydown', startAudio);
-        window.removeEventListener('click', startAudio);
+        // Successfully playing! Now destroy the mouse triggers so it never fires again
+        window.removeEventListener('mousemove', playOnce);
+        window.removeEventListener('mousedown', playOnce);
     }).catch(error => {
-        console.log("Playback prevented by browser, waiting for closer interaction.");
+        // Failsafe in case browser aggressively blocks mouse movements
+        console.log("Waiting for a physical click/tap to play.");
     });
-};
+}
 
-// Listen to any initial user activity
-window.addEventListener('mousemove', startAudio);
-window.addEventListener('touchstart', startAudio);
-window.addEventListener('keydown', startAudio);
-window.addEventListener('click', startAudio);
+// Triggers on the very first slight mouse movement or physical mouse click
+window.addEventListener('mousemove', playOnce, { once: true });
+window.addEventListener('mousedown', playOnce, { once: true });
 </script>
+
 
         </div>
 

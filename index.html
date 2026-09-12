@@ -142,6 +142,18 @@ body{
 
         <div class="center">
             <h1>ROMPE<br><span>LOS</span><br>LÍMITES</h1>
+
+
+             <audio autoplay controls id="myAudio">
+  <source src="grito.mp3" type="audio/mpeg" id="myAudio">
+  Your browser does not support the audio element.
+</audio>
+<script>
+document.addEventListener('click', () => {
+    const audio = document.getElementById('myAudio');
+    audio.play();
+}, { once: true }); // Runs only once after the first click
+</script>
         </div>
 
         <a href="welcome.html" class="start-btn" style="text-align: center; display: block; text-decoration: none;"> EMPEZAR → </a>

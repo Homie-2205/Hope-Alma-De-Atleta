@@ -118,7 +118,7 @@
     }
     
     nav.scrolled {
-      background-color: #ffd480; /* Se convierte en amarillo */
+      background-color: #4dff4d; /* Se convierte en amarillo */
       box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); /* Sombra para dar profundidad */
     }
 
@@ -191,9 +191,9 @@
     width: 100%;
     padding: 25px 30px;
     font-size: 1.1rem;
-    border: 2px solid #ffd700;
+    border: 2px solid  #4dff4d;
     border-radius: 25px;
-    background-color: #fcf9f5;
+    background-color: #e6ffe6;
     color: #333333;
     outline: none;
     transition: all 0.3s ease;
@@ -209,7 +209,7 @@
 
 /* Efecto visual al hacer clic en el input */
 .input-group input:focus {
-    border-color: #ffcc00;
+    border-color: #4dff4d;
     box-shadow: 0 0 10px rgba(255, 204, 0, 0.5);
     background-color: #ffffff;
 }
@@ -238,7 +238,7 @@
             margin-right: 1.5rem;
         }
         .nav-links a {
-            color: #fff;
+            color: #fff; #4dff4d;
             text-decoration: none;
             transition: color 0.3s;
             margin-right: 1.5rem;
@@ -318,8 +318,8 @@
   text-align: center;
 
   /* Colors & Borders */
-  color: #1a1100;
-  background-color: #ffd480;
+  color: #1a1100; 
+  background-color: #4dff4d;
   border: none;
   border-radius: 8px;
 
@@ -358,6 +358,7 @@
           font-family:  Georgia, Serif;
              letter-spacing: 5px;
             font-weight: 180;
+             color: #4dff4d;
         }
         .content-text h3 {
             font-size: 1.3rem;
@@ -365,6 +366,7 @@
             margin-bottom: 1rem;
              font-family:  Georgia, Serif;
               font-weight: 160;
+               color: #4dff4d;
 
         }
         .content-text p {
@@ -386,7 +388,7 @@
 
         /* 7. Footer */
         .site-footer {
-            background-color: #ffd480;
+            background-color:  #4dff4d;
             color: #fff;
             text-align: center;
             padding: 1.5rem;
@@ -400,8 +402,8 @@
     /* Outermost frame bounding structural lines */
     .outer-geometric-frame {
       position: relative;
-      width: 300px;
-      height: 300px;
+      width: 650px;
+      height: 650px;
       padding: 9px;
       box-sizing: border-box;
       
@@ -467,6 +469,31 @@
 
         
     </style>
+    
+    
+    <style>
+    
+    .image-containerCristian {
+  display: flex;
+  justify-content: center; /* Centers horizontally */
+  align-items: center;     /* Centers vertically */
+  min-height: 100vh;       /* Optional: full screen height */
+}
+
+.square-image {
+  width: 550px;
+  height: 550px;
+  object-fit: cover;
+}
+
+    
+    
+    
+    
+    
+    
+    
+    </style>
 </head>
 <body>
 
@@ -530,7 +557,7 @@ function greetUser() {
     let message;
 
     if (name.trim() !== "") {
-        message = `¡Hola, ${name}! ¿Cómo estás hoy?`;
+        message = `¡Hola ${name}! ¿Cómo estás hoy me robaron cuando estaba construyendo, deseas apoyarme?`;
     } else {
         message = "Por favor, ingresa tu nombre.";
     }
@@ -585,7 +612,7 @@ window.speechSynthesis.onvoiceschanged = () => {
         <section class="content-text">
             <div class="container-section">
             <h2>Alma de Atleta</h2>
-
+<div class="image-containerCristian">
                  <div class="outer-geometric-frame">
     <div class="mid-geometric-lines">
       <div class="inner-sharp-border">
@@ -594,40 +621,37 @@ window.speechSynthesis.onvoiceschanged = () => {
           </div>
           </div>
                        </div>
+                        </div>
                 
             <p style="color: gray;">
                 Para tomar la frecuencia cardíaca, te recomiendo usar los dedos índice y medio en la muñeca opuesta. Presiona suavemente hasta sentir el pulso y cuenta las pulsaciones durante un minuto completo para obtener el valor más exacto. Abajo está un cronómetro lo puede utilizar para medir la frecuencia cardíaca. Esta formula funciona mejor que algunas aplicaciones, porque la medida es más exacta.
             </p>
             </div>
 
-             <div class="container">
-        <div id="display">00:00.00</div>
-        <button id="startStop">Start</button>
-        <button id="reset">Reset</button>
-        <button onclick="window.location.href='index.html';" style="background-color:#333; color:white;">INICIO</button>
-    </div>
-
-            
+             
+            <div class="image-containerCristian">
                  <div class="outer-geometric-frame">
     <div class="mid-geometric-lines">
       <div class="inner-sharp-border">
-            <img src="pulso.png" class="w3-round w3-image w3-opacity-min" alt="Table Setting" width="600" height="750">
+          
+          
+            <img src="pulso.png" onclick="openExtensionPopup('pulso.png')" alt="Table Setting" width="600" height="750">
 
             </div>
                     </div>
                                  </div>
+                                  </div>
             
-              <audio autoplay controls id="myAudio">
-  <source src="Michael.mp3" type="audio/mpeg" id="myAudio">
-  Your browser does not support the audio element.
-</audio>
-<script>
-document.addEventListener('click', () => {
-    const audio = document.getElementById('myAudio');
-    audio.play();
-}, { once: true }); // Runs only once after the first click
+        <script>
+// One single function to rule them all
+function openExtensionPopup(imageSrc) {
+    window.open(
+        imageSrc, 
+        '_blank', 
+        'width=700,height=600,resizable=yes,scrollbars=yes'
+    );
+}
 </script>
-
 
 
 

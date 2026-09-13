@@ -178,22 +178,7 @@ window.addEventListener('mousedown', playOnce, { once: true });
 
 </div>
 
-<script>
-const langs = document.querySelectorAll('.lang');
 
-langs.forEach(btn=>{
-    btn.addEventListener('click',()=>{
-        langs.forEach(b=>b.classList.remove('active'));
-        btn.classList.add('active');
-    });
-});
-
-document.querySelector('.start-btn')
-.addEventListener('click',()=>{
-    alert('Bienvenido');
-    // window.location.href = "home.html";
-});
-</script>
 
 </body>
 </html>

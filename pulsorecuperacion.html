@@ -387,7 +387,7 @@
 
 
         /* 7. Footer */
-        .site-footer {
+       .site-footer {
             background-color:  #4dff4d;
             color: #fff;
             text-align: center;
@@ -516,6 +516,76 @@ height: 350px;
     
     
     </style>
+
+    <style>
+
+
+<style>
+body {
+    background-color: #d9ffcc;
+    color: #ffffff;
+    font-family: 'Courier New', Courier, monospace;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.chronometer {
+    text-align: center;
+    background: #ccffcc;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+}
+
+#display {
+    font-size: 3.5rem;
+    margin-bottom: 20px;
+    font-weight: bold;
+}
+
+#ms {
+    font-size: 2rem;
+    color:  #4dff4d;;
+}
+
+button {
+    font-size: 1.2rem;
+    padding: 10px 25px;
+    margin: 5px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+#startStopBtn {
+    background-color:  #4dff4d;
+    color: white;
+}
+
+#startStopBtn.running {
+    background-color: #ff4141;
+}
+
+#resetBtn {
+    background-color: #393e46;
+    color: white;
+}
+
+button:hover {
+    opacity: 0.9;
+}
+
+
+
+
+
+</style>
+        
+   
 </head>
 <body>
 
@@ -663,6 +733,17 @@ window.speechSynthesis.onvoiceschanged = () => {
                     </div>
                                  </div>
                                   </div>
+                                  
+                                  
+                                   <div class="chronometer">
+        <div id="display">00:00:00.<span id="ms">000</span></div>
+        <div class="buttons">
+            <button id="startStopBtn" onclick="startStop()">Start</button>
+            <button id="resetBtn" onclick="reset()">Reset</button>
+        </div>
+    </div>
+    
+    <script></script>
             
         <script>
 // One single function to rule them all
@@ -707,52 +788,76 @@ function openExtensionPopup(imageSrc) {
   });
 </script>
 
-<script>
-    let startTime;
-    let elapsedTime = 0;
-    let timerInterval;
 
-    function timeToString(time) {
-        let diffInMin = time / 60000;
-        let mm = Math.floor(diffInMin);
-        let diffInSec = (diffInMin - mm) * 60;
-        let ss = Math.floor(diffInSec);
-        let diffInMs = (diffInSec - ss) * 100;
-        let ms = Math.floor(diffInMs);
-        return `${mm.toString().padStart(2, "0")}:${ss.toString().padStart(2, "0")}.${ms.toString().padStart(2, "0")}`;
-    }
+<scrip>
 
-    function print(txt) { document.getElementById("display").innerHTML = txt; }
+ <script>
+    
+    let startTime = 0;
+let elapsedTime = 0;
+let timerInterval;
+let isRunning = false;
 
-    function start() {
+const display = document.getElementById("display");
+const startStopBtn = document.getElementById("startStopBtn");
+
+function startStop() {
+    if (!isRunning) {
+        // Start the chronometer
         startTime = Date.now() - elapsedTime;
-        timerInterval = setInterval(() => {
-            elapsedTime = Date.now() - startTime;
-            print(timeToString(elapsedTime));
-        }, 10);
-        document.getElementById("startStop").innerHTML = "Stop";
-    }
-
-    function stop() {
+        timerInterval = setInterval(updateDisplay, 10);
+        startStopBtn.textContent = "Stop";
+        startStopBtn.classList.add("running");
+        isRunning = true;
+    } else {
+        // Stop the chronometer
         clearInterval(timerInterval);
-        document.getElementById("startStop").innerHTML = "Start";
+        elapsedTime = Date.now() - startTime;
+        startStopBtn.textContent = "Start";
+        startStopBtn.classList.remove("running");
+        isRunning = false;
     }
+}
 
-    function reset() {
-        clearInterval(timerInterval);
-        print("00:00.00");
-        elapsedTime = 0;
-        document.getElementById("startStop").innerHTML = "Start";
-    }
+function reset() {
+    clearInterval(timerInterval);
+    startTime = 0;
+    elapsedTime = 0;
+    isRunning = false;
+    display.innerHTML = '00:00:00.<span id="ms">000</span>';
+    startStopBtn.textContent = "Start";
+    startStopBtn.classList.remove("running");
+}
 
-    document.getElementById("startStop").addEventListener("click", () => {
-        if (document.getElementById("startStop").innerHTML === "Start") start();
-        else stop();
-    });
+function updateDisplay() {
+    elapsedTime = Date.now() - startTime;
 
-    document.getElementById("reset").addEventListener("click", reset);
+    let totalMilliseconds = elapsedTime;
+    let hours = Math.floor(totalMilliseconds / 3600000);
+    totalMilliseconds %= 3600000;
+
+    let minutes = Math.floor(totalMilliseconds / 60000);
+    totalMilliseconds %= 60000;
+
+    let seconds = Math.floor(totalMilliseconds / 1000);
+    let milliseconds = totalMilliseconds % 1000;
+
+    // Pad strings with leading zeros
+    let hStr = String(hours).padStart(2, "0");
+    let mStr = String(minutes).padStart(2, "0");
+    let sStr = String(seconds).padStart(2, "0");
+    let msStr = String(milliseconds).padStart(3, "0");
+
+    display.innerHTML = `${hStr}:${mStr}:${sStr}.<span id="ms">${msStr}</span>`;
+}
+
+    
+    
+    
+
+
+
 </script>
-    
 
 
 
@@ -761,19 +866,6 @@ function openExtensionPopup(imageSrc) {
 
     
     
-
-
-
-
-    
-        
-
-
-
-    
-            
-          
-
 
 
 

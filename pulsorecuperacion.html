@@ -773,6 +773,52 @@ window.speechSynthesis.onvoiceschanged = () => {
             <button id="resetBtn" onclick="reset()">Reset</button>
         </div>
     </div>
+
+<h1>12-Minute Running Coach</h1>
+  <button id="startBtn">Start Run</button>
+  <div id="display">Press start to begin your run.</div>
+
+            
+  <script>
+    const startBtn = document.getElementById('startBtn');
+    const display = document.getElementById('display');
+    
+    let minutesElapsed = 0;
+    const targetMinutes = 12;
+
+    startBtn.addEventListener('click', () => {
+      // Disable button once clicked
+      startBtn.disabled = true;
+      startBtn.style.backgroundColor = '#6c757d';
+      display.textContent = `Running... 0 / ${targetMinutes} minutes`;
+
+      // Speak initial start message
+      const startUtterance = new SpeechSynthesisUtterance("Your run has started. Let's go!");
+      window.speechSynthesis.speak(startUtterance);
+
+      // Start the interval (change 60000 to 2000 if you want to test it fast)
+      const workoutInterval = setInterval(() => {
+        minutesElapsed++;
+
+        let message = "";
+
+        if (minutesElapsed < targetMinutes) {
+          message = `You have run ${minutesElapsed} ${minutesElapsed === 1 ? 'minute' : 'minutes'}`;
+        } else {
+          message = `Congratulations! You have completed your ${targetMinutes} minute run.`;
+          clearInterval(workoutInterval);
+        }
+
+        // Update visual display
+        display.textContent = `Completed: ${minutesElapsed} / ${targetMinutes} minutes`;
+
+        // Speak the message
+        const utterance = new SpeechSynthesisUtterance(message);
+        window.speechSynthesis.speak(utterance);
+
+      }, 60000); // 60000 ms = 1 minute
+    });
+  </script>
     
     <script></script>
             

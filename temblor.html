@@ -126,6 +126,121 @@
   .gps-btn:active {
     transform: scale(0.97);
   }
+
+
+  
+
+        .nav-links li {
+            margin-right: 1.5rem;
+        }
+        .nav-links a {
+            color: #fff;
+            text-decoration: none;
+            transition: color 0.3s;
+            margin-right: 1.5rem;
+        }
+        .nav-links a:hover {
+            color: #00adb5;
+        }
+
+        /* 2. Header */
+        .hero-header {
+        background-image: url("I.gif");
+            text-align: center;
+            padding: 4rem 2rem;
+            border-bottom: 1px solid #ddd;
+             background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    margin: 0;
+    height: 60vh;
+        }
+        .hero-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            color: #222;
+        }
+
+.lang-link {
+  color: #334155;
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 500;
+  display: inline-flex; /* Mantiene el link compacto e interno */
+  align-items: center; /* Corrección: "center" alinea el icono con el texto */
+  gap: 0.3rem;
+  padding: 0.3rem 0.6rem;
+  border-radius: 0.375rem;
+  transition: all 0.2s ease;
+}
+
+        /* 3. Main Div Container */
+        .main-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* 4. Photos Section */
+        .photo-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+        .photo-gallery img {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .lang-list {
+  display: flex;
+  list-style: none;               
+  margin: 0 0 0 3rem; /* Added left margin to space it from the label */
+  padding: 0;
+  gap: 1rem;          /* Spacing between language choices */
+}
+        .custom-button {
+  /* Layout & Sizing */
+  display: inline-block;
+  padding: 12px 24px;
+
+  /* Typography */
+  font-family: 'Segoe UI', Roboto, sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  text-decoration: none;
+  text-align: center;
+
+  /* Colors & Borders */
+  color: #1a1100;
+  background-color: #ffd480;
+  border: none;
+  border-radius: 8px;
+
+  /* Interactivity & Performance */
+  cursor: pointer;
+  user-select: none;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+/* Hover State: When the mouse pointer sits over the button */
+.custom-button:hover {
+  background-color: #005ce6;
+}
+
+/* Active State: When the button is being clicked */
+.custom-button:active {
+  transform: scale(0.98);
+}
+
+/* Focus State: When navigating via keyboard for web accessibility */
+.custom-button:focus-visible {
+  outline: 3px solid #80bfff;
+  outline-offset: 2px;
+}
+
 </style>
 </head>
 <body>
@@ -138,8 +253,10 @@
   </div>
 
   <!-- Centered Navigation Button -->
-  <button class="" <a href="https://earthquake.usgs.gov/earthquakes/map/?extent=-31.10975,119.96103&extent=9.31857,127.43174&showPopulationDensity=true&baseLayer=ocean&settings=true&help=interface&helpAnchor=help-list-earthquakes     ';" class="start" style="width: 100px; height: 50px; background-color: black; color: white; border: none; cursor: pointer;" class="w3-bar-item w3-button">Terremoto</a>>
-    <span>📍</span> Temblor
+
+  
+  <button class=""  <a href="https://earthquake.usgs.gov/earthquakes/map/?extent=-31.10975,119.96103&extent=9.31857,127.43174&showPopulationDensity=true&baseLayer=ocean&settings=true&help=interface&helpAnchor=help-list-earthquakes     ';" class="start" style="width: 100px; height: 50px; background-color: black; color: white; border: none; cursor: pointer;" class="w3-bar-item w3-button" class="custom-button">Temblor</a>
+    <span>📍</span> 
   </button>
 
 </body>

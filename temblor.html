@@ -1,0 +1,151 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GPS Sky Navigation</title>
+<style>
+  /* Reset and Fullscreen Layout */
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    /* Rich Sky Gradient Background */
+    background: linear-gradient(to bottom, #1b4965, #62b6cb);
+    position: relative;
+    font-family: system-ui, -apple-system, sans-serif;
+  }
+
+  /* Base Cloud Container */
+  .cloud-layer {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+  }
+
+  /* CSS Generated White Clouds */
+  .cloud {
+    position: absolute;
+    background: #ffffff;
+    width: 200px;
+    height: 60px;
+    border-radius: 200px;
+    opacity: 0.85;
+  }
+
+  /* Cloud bumps created using pseudo-elements */
+  .cloud:before, .cloud:after {
+    content: '';
+    position: absolute;
+    background: #ffffff;
+    width: 100px;
+    height: 100px;
+    position: absolute;
+    top: -50px;
+    left: 30px;
+    border-radius: 100px;
+  }
+
+  .cloud:after {
+    width: 120px;
+    height: 120px;
+    top: -70px;
+    left: auto;
+    right: 25px;
+  }
+
+  /* Individual Cloud Positions & Infinite Loop Animations */
+  .c1 {
+    top: 15%;
+    left: -250px;
+    transform: scale(0.6);
+    opacity: 0.6;
+    animation: drift 35s linear infinite;
+  }
+
+  .c2 {
+    top: 45%;
+    left: -250px;
+    transform: scale(0.9);
+    opacity: 0.75;
+    animation: drift 25s linear infinite;
+    animation-delay: -10s; /* Offsets starting position */
+  }
+
+  .c3 {
+    top: 70%;
+    left: -250px;
+    transform: scale(0.5);
+    opacity: 0.5;
+    animation: drift 45s linear infinite;
+    animation-delay: -5s;
+  }
+
+  @keyframes drift {
+    0% { left: -250px; }
+    100% { left: 100vw; }
+  }
+
+  /* Strong, Modern GPS Button */
+  .gps-btn {
+    position: relative;
+    z-index: 10; /* Ensures the button sits cleanly in front of the clouds */
+    background-color: #007bff;
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    padding: 16px 32px;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25), 0 0 15px rgba(0, 123, 255, 0.4);
+    transition: background-color 0.2s, transform 0.1s, box-shadow 0.2s;
+  }
+
+  .gps-btn:hover {
+    background-color: #0056b3;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35), 0 0 25px rgba(0, 123, 255, 0.6);
+  }
+
+  .gps-btn:active {
+    transform: scale(0.97);
+  }
+</style>
+</head>
+<body>
+
+  <!-- CSS White Clouds Layer -->
+  <div class="cloud-layer">
+    <div class="cloud c1"></div>
+    <div class="cloud c2"></div>
+    <div class="cloud c3"></div>
+  </div>
+
+  <!-- Centered Navigation Button -->
+  <button class="" <a href="https://earthquake.usgs.gov/earthquakes/map/?extent=-31.10975,119.96103&extent=9.31857,127.43174&showPopulationDensity=true&baseLayer=ocean&settings=true&help=interface&helpAnchor=help-list-earthquakes     ';" class="start" style="width: 100px; height: 50px; background-color: black; color: white; border: none; cursor: pointer;" class="w3-bar-item w3-button">Terremoto</a>>
+    <span>📍</span> Temblor
+  </button>
+
+</body>
+</html>
+
+
+
+
+

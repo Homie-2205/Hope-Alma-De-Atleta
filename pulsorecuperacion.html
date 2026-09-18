@@ -263,7 +263,7 @@
 
         /* 2. Header */
         .hero-header {
-        background-image: url("I.gif");
+        background-image: url("elena.gif");
             text-align: center;
             padding: 4rem 2rem;
             border-bottom: 1px solid #ddd;
@@ -904,52 +904,7 @@ function updateDisplay() {
 
 
 
-<script>
-    let timeLeft = 60;
-    let timerId = null;
 
-    // Función para que el navegador hable
-    function speak(text) {
-        if ('speechSynthesis' in window) {
-            const utterance = new SpeechSynthesisUtterance(text);
-            utterance.lang = 'es-ES'; // Configurado en español
-            window.speechSynthesis.speak(utterance);
-        }
-    }
-
-    function updateDisplay() {
-        const minutes = Math.floor(timeLeft / 60);
-        const seconds = timeLeft % 60;
-        document.getElementById('timer').textContent = 
-            `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
-    }
-
-    function startTimer() {
-        // Deshabilitar botón durante la ejecución
-        document.getElementById('startBtn').disabled = true;
-        
-        // Voz de inicio
-        speak("Comienza");
-
-        timerId = setInterval(() => {
-            timeLeft--;
-            updateDisplay();
-
-            if (timeLeft <= 0) {
-                clearInterval(timerId);
-                // Voz de finalización
-                speak("Para");
-                
-                // Restablecer interfaz
-                setTimeout(() => {
-                    timeLeft = 60;
-                    updateDisplay();
-                    document.getElementById('startBtn').disabled = false;
-                }, 2000); // Espera 2 segundos antes de reiniciar el botón
-            }
-        }, 1000);
-    }
-</script>
 
 
     

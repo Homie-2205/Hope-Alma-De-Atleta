@@ -407,8 +407,8 @@
     /* Outermost frame bounding structural lines */
     .outer-geometric-frame {
       position: relative;
-      width: 370px;
-      height: 370px;
+      width: 790px;
+      height: 790px;
       padding: 9px;
       box-sizing: border-box;
       
@@ -518,8 +518,8 @@ height: 350px;
     /* Outermost frame bounding structural lines */
     .outer-geometric-frame {
       position: relative;
-      width: 370px;
-      height: 370px;
+      width: 510px;
+      height: 510px;
       padding: 9px;
       box-sizing: border-box;
       
@@ -616,15 +616,22 @@ height: 350px;
 
 
 .square-image {
- width: 350px;
-height: 350px;
+ width: 780px;
+height: 780px;
   object-fit: cover;
     border-radius: 8px;
 }
 
     
     
-    
+    @media (max-width: 300px) and (max-height: 300px) { 
+
+  .square-image
+                 { 
+    display: none; 
+  }
+}
+
     
     </style>
 
@@ -692,7 +699,7 @@ function greetUser() {
     let message;
 
     if (name.trim() !== "") {
-        message = `¡Hola ${name}! ¿Cómo estás hoy me robaron cuando estaba construyendo, deseas apoyarme?`;
+        message = `¡Hola ${name}! ¿Cómo estás, este es un codigo y convenio, que la NASA le hace a los programadores curiosos y creativos con ética. Se actualiza la imagen y contenido todos los dias.?`;
     } else {
         message = "Por favor, ingresa tu nombre.";
     }

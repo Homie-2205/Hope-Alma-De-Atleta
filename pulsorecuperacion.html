@@ -3,25 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Recuperacion</title>
-    <style>
+    <title>Frecuencia Cardiaca</title>
+  
+  <style>
         /* ==========================================================================
            CSS STYLES
-                    CSS STYLES
- 
-
-
-.
-
-  /* Interactivity & Performance */
-
-
-
-
-   
-
-
-         CSS STYLES
            ========================================================================== */
 {
     margin: 0;
@@ -476,18 +462,9 @@
     }
         
     </style>
-        
-   <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            margin: 0;
-            background-color: #f4f4f9;
-        }
+
+ <style>
+      
         .container {
             text-align: center;
             background: white;
@@ -505,15 +482,15 @@
             padding: 12px 24px;
             font-size: 1.2rem;
             font-weight: bold;
-            color: white;
-            background-color: #007bff;
+            color: white;      #007bff;
+            background-color:  #66ff33;
             border: none;
             border-radius: 6px;
             cursor: pointer;
             transition: background 0.2s;
         }
         button:hover {
-            background-color: #0056b3;
+            background-color: #66ff33;
         }
         button:disabled {
             background-color: #cccccc;
@@ -527,10 +504,11 @@
 }
 
 
-
-       
-       
-    </style>
+ 
+ 
+ 
+ </style>
+    
 </head>
 <body>
 
@@ -542,22 +520,9 @@
 
 <nav id="navbar">
 <div class="lang-list">
-    <li>
-      <a href="indexEnglish.html" class="lang-link">
-         <span class="custom-flag">🇺🇸</span>  En
 
-      </a>
-    </li>
-    <li>
-      <a href="index.html" class="lang-link">
-        <span class="custom-flag">🇨🇴</span> Es
-      </a>
-    </li>
-    <li>
-    <a href="indexFrancais.html" class="lang-link">
-     <span class="custom-flag">🇫🇷</span> Fr
-     </a>
-     </li>
+    
+    
   
   </div>
 
@@ -635,18 +600,8 @@ window.speechSynthesis.onvoiceschanged = () => {
     <!-- 3. Main Div Container -->
     <div class="main-container">
 
-        <!-- 4. Photos Section -->
-
-
-
-
-
-
-
-
-
-        <!-- 5. Headings and 6. Paragraph Section -->
-        <section class="content-text">
+      
+  <section class="content-text">
             <div class="container-section">
             <h2>Alma de Atleta</h2>
 <div class="photo-gallery">
@@ -715,7 +670,7 @@ window.speechSynthesis.onvoiceschanged = () => {
       display.textContent = `Running... 0 / ${targetMinutes} minutes`;
 
       // Speak initial start message
-      const startUtterance = new SpeechSynthesisUtterance("Your run has started. Let's go!");
+      const startUtterance = new SpeechSynthesisUtterance("Your test de cooper has started. Let's go!");
       window.speechSynthesis.speak(startUtterance);
 
       // Start the interval (change 60000 to 2000 if you want to test it fast)
@@ -883,7 +838,7 @@ function updateDisplay() {
         document.getElementById('startBtn').disabled = true;
         
         // Voz de inicio
-        speak("Comienza");
+        speak("Comienza la toma de frecuencia cardiaca");
 
         timerId = setInterval(() => {
             timeLeft--;
@@ -892,7 +847,7 @@ function updateDisplay() {
             if (timeLeft <= 0) {
                 clearInterval(timerId);
                 // Voz de finalización
-                speak("Para");
+                speak("Termina la toma de frecuencia cardiaca");
                 
                 // Restablecer interfaz
                 setTimeout(() => {
@@ -908,10 +863,10 @@ function updateDisplay() {
 
 
 
-
-
     
-    
+            
+          
+
 
 
 

@@ -459,16 +459,13 @@
     
     
     <style>
-.responsive-img {
-    width: 100%;
-   
-    height: auto;
-    display: block;
-    margin: 0 auto;
-}
 
 
-       
+          .main-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
 
     
     .photo-gallery  {
@@ -485,6 +482,14 @@ height: 370px;
 }
 
     
+    @media (max-width: 300px) and (max-height: 300px) { 
+
+   .photo-gallery 
+                 { 
+    display: none; 
+  }
+}
+
     
     
     
@@ -493,81 +498,8 @@ height: 370px;
     
     </style>
 
-     <style>
-
-
-
-    /* Outermost frame bounding structural lines */
-    .outer-geometric-frame {
-      position: relative;
-      width: 310px;
-      height: 310px;
-      padding: 9px;
-      box-sizing: border-box;
-      
-      /* Generates the primary outer parallel golden outlines */
-      border: 3px double #d4af37; 
-      outline: 1px solid #f3e5ab;
-      outline-offset: -8px;
-      
-      /* Simulates metallic reflection */
-      box-shadow: 
-        inset 0 0 15px rgba(212, 175, 55, 0.3),
-        0 0 20px rgba(0, 0, 0, 0.7);
-        
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-
-    /* Recreates the secondary inner nested lines and geometric offsets */
-    .mid-geometric-lines {
-      width: 100%;
-      height: 100%;
-      padding: 19px;
-      box-sizing: border-box;
-      border: 1px solid #aa7c11;
-      
-      /* Layered double lines using inset box shadows to match the image structure */
-      box-shadow: 
-        inset 0 0 0 2px #d4af37,
-        inset 0 0 0 6px #ffffff,
-        inset 0 0 0 8px #f3e5ab,
-        inset 0 0 0 10px #aa7c11;
-        
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      position: relative;
-    }
-
-    /* Core inner frame line sitting directly against your image */
-    .inner-sharp-border {
-      width: 100%;
-      height: 100%;
-      border: 4px double #d4af37;
-      box-shadow: 0 0 0 4px #ffffff;
-      overflow: hidden;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      background-color: #ffffff;
-    }
-
-    /* The nested display content placeholder */
-    .inner-sharp-border img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-        
-========================================================================== */
-
-
-
-        
-    </style>
-    
+   
+  
     
     <style>
 
@@ -580,14 +512,6 @@ height: 370px;
 
     
     
-    @media (max-width: 300px) and (max-height: 300px) { 
-
-   .photo-gallery 
-                 { 
-    display: none; 
-  }
-}
-
     
     </style>
 
